@@ -9,3 +9,4 @@ Description: This is a package for calculating change point for time course mult
 License: GPL (>= 2)
 Imports: Rcpp (>= 1.0.0)
 LinkingTo: Rcpp
+RoxygenNote: 6.1.1
