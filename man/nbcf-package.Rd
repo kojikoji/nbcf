@@ -24,13 +24,8 @@ Maintainer: Yasuhiro Kojima <tiisaishima@gmail.com>
 }
 
 \examples{
-sim.data <- data(sim.data)
-nbcf.obj <- loadData(sim.data$count.mat, sim.data$t)
-nbcf.obj <- setupNegativeBinomDict(nbcf.obj)
-nbcf.obj <- calculateQt(nbcf.obj, lambda= 0.01, alpha=1.0, beta=1.0)
-nbcf.obj <- perfectSimulation(nbcf.obj)
-nbcf.obj <- estimateMap(nbcf.obj)
-nbcf.obj <- detectVariate(nbcf.obj)
+data(sim.data)
+nbcf.obj <- calculateNbcf(count.mat=sim.data$count.mat, t.vec=sim.data$t.vec, alpha=1.0, beta=1.0, r=30, lambda= 0.01)
 hist(nbcf.obj@change.point)
 nbcf.obj@change.variate
 }
