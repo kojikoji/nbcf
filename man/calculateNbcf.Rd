@@ -5,7 +5,8 @@
 \title{calculateNbcf}
 \usage{
 calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
-  r = 30, lambda = 0.01, p.res = 1000, count.res = 1000, t.res)
+  r = 30, lambda = 0.01, p.res = 1000, count.res = 1000,
+  t.res = 100)
 }
 \arguments{
 \item{count.mat}{Count matrix. Each row represent each variate. Each column represent each observation}
@@ -36,6 +37,9 @@ Function for detecting change points and changed variates
 }
 \details{
 This function is responsible for main calculation of this package. This calculate simulated change points and MAP estimates of them, and detect variates which significantly changed between each MAP estimated change points.
+}
+\seealso{
+[Nbcf]
 }
 \author{
 Yasuhiro Kojima

@@ -14,18 +14,19 @@
 ##' @param count.res Approximation resolution of count.
 ##' @param t.res Approximation resolution of t.
 ##' @return nbcf Instance of class \code{\link{Nbcf}}
+##' @seealso [Nbcf]
 ##' @author Yasuhiro Kojima
 
 calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
-                          p.res=1000, count.res=1000, t.res){
-  lnb.dict <- setupLogNegativeBinomDict(count.mat, p.res, count.res)
-  Pst <- calculatePst(lnb.dict.mat, count.mat, mean.bias.vec, alpha, beta, r, t.res)
+                          p.res=1000, count.res=1000, t.res=100){
+  lnb.dict <- setupLnbDict(count.mat, mean.bias.vec, p.res, count.res)
+  Pst <- calculatePst(lnb.dict.mat, count.mat, alpha, beta, r, t.res)
   Qt <- calculateQt(Pst, lambda)
   sim.change.point <- perfectSimulation(Qt, Pst, lambda)
   map.change.point <- estimateMap(Qt, Pst, lambda)
   change.variate <- detectVariate(map.change.point, count.mat, lnb.dict)
-  nbcf.obj <- new("nbcf", count.mat=count.mat, t.vec=t.vec, mean.bias.vec=mean.bias.vec,
+  nbcf <- new("Nbcf", count.mat=count.mat, t.vec=t.vec, mean.bias.vec=mean.bias.vec,
                   params=list(alpha=alpha, beta=beta, r=r, lambda=lambda,
                               p.res=p.res, count.res=count.res),
                   lnb.dict=lnb.dict, Pst=Pst, Qt=Qt,
