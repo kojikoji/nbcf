@@ -1,6 +1,7 @@
 # Emacs
 *~
-
+\#*
+.*
 # C++ extensions
 *.so
 *.o
