@@ -1,0 +1,23 @@
+## LnbDict class
+## Yasuhiro Kojima
+
+##' Data stroge for log negative binomial probability
+##'
+##' This class is a storage for precomputated log negative binomial probability. This also has the index conversion matrix and vector for parameter p and count.
+##'
+##' @title Lnbdict
+##' @slot lnb.dict Storage for precomputated log negative binomial probability. These values are stroged in a matrix lnb.dict$values. lnb.dict also has conversion  from count and value of p to row and column index of the matrix as lnb.dict$count2row and lnb.dict$p2column, respectively.
+##' @slot value A matrix storaging negative binomial probability. Each row and column represent each value of count and value of p.
+##' @slot count.dict This is a sparse vector each elements have the row index of \code{value} cressponding the count represented by index of this vector
+##' @slot p.dict This is a dense matrix. Each element has a column index of \code{value} after correction against \code{\link[Nbcf]{mean.bias.vec}}. Each column represents index of p before correction. Each Each row represents observation index.
+##' @author Yasuhiro Kojima
+##' 
+##' @import Matrix
+
+setClass(
+  "LnbDict",
+  representation(
+    value="matrix",
+    count.dict="dgCMatrix",
+    p.dict="matrix")
+)
