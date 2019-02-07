@@ -1,4 +1,3 @@
-
 library(tidyverse)
 library(Matrix)
 change.point <- c(0.2, 0.7)
