@@ -29,7 +29,7 @@ test_that("p.vec from calculatePvec is correct", {
                1)
 })
 
-test_that("p.dict from calculate_p_dict is correct", {
+test_that("p.dict from calculatePdict is correct", {
   expect_equal(dim(rcpp_calculate_p_dict(c(0.1, 0.5, 0.9), c(0.7, 1.2))),
                c(3, 2))
   expect_equal(
@@ -38,4 +38,12 @@ test_that("p.dict from calculate_p_dict is correct", {
              0, 1, 2),
            ncol=2))
 
+})
+
+test_that("lnb probability from calculateLnbValues is correct", {
+  lnb.values <- calculateLnbValues(c(10, 20), c(0.1, 0.5), 30)
+  expect_equal(
+    lnb.values[1, 1], log(dnbinom(10, 30, 1 - 0.1)))
+  expect_equal(
+    lnb.values[1, 2], log(dnbinom(10, 30, 1 - 0.5)))    
 })

@@ -16,7 +16,7 @@ setupLnbDict <- function(count.max, count.res, p.res, mean.bias.vec){
   count.dict <- calculateCountDict(count.vec)
   p.vec <- calculatePvec(p.res)
   p.dict <- calculatePdict(p.vec, mean.bias.vec)
-  lnb.values <- calculateLnbValue(count.vec, p.vec)
+  lnb.values <- calculateLnbValues(count.vec, p.vec)
   lnbdict <- new("LnbDict", values=lnb.values, count.dict=count.dict, p.dict=p.dict)
   return(lnbdict)
 }
@@ -97,3 +97,15 @@ calculatePdict <- function(p.vec, mean.bias.vec){
   return(p.dict)
 }
 
+##' Calculate the probability value of log negative binomial distribution
+##'
+##' The values are calculated for each count (row) and p (column)
+##' @title calculateLnbValues
+##' @param count.vec Interger vector, Selected count grid points
+##' @param p.vec Interger vector, Selected p grid points
+##' @return lnb.mat
+##' @author Yasuhiro Kojima
+calculateLnbValues <- function(count.vec, p.vec, r){
+  lnb.mat <- rcpp_calculate_lnb_values(count.vec, p.vec, r)
+  return(lnb.mat)
+}
