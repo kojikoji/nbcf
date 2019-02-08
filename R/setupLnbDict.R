@@ -83,6 +83,7 @@ calculatePvec <- function(p.res){
   p.vec <- p.vec/p.vec[length(p.vec)]
   return(p.vec)
 }
+
 ##' Calculate p dictionary from each observation grid to grids corrected for mean.bias.vec
 ##'
 ##' We have to calculate negative binomial probability to p corrected for mean.bias.vec Hence, we need to use conversion before after correction.
@@ -91,6 +92,8 @@ calculatePvec <- function(p.res){
 ##' @return p.dict Numeric matrix, conversion index form each grid point in each observation to reference grid points. each row represents grid point. each column represents each observation.
 ##' @author Yasuhiro Kojima
 calculatePdict <- function(p.vec, mean.bias.vec){
-  p.dict <- rcpp_calculate_pdict(p.vec, mean.bias.vec)
+  mean.bias.vec <- mean.bias.vec/mean(mean.bias.vec)
+  p.dict <- rcpp_calculate_p_dict(p.vec, mean.bias.vec)
   return(p.dict)
 }
+

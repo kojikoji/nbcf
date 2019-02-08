@@ -28,3 +28,14 @@ test_that("p.vec from calculatePvec is correct", {
   expect_equal(calculatePvec(10)[10],
                1)
 })
+
+test_that("p.dict from calculate_p_dict is correct", {
+  expect_equal(dim(rcpp_calculate_p_dict(c(0.1, 0.5, 0.9), c(0.7, 1.2))),
+               c(3, 2))
+  expect_equal(
+    rcpp_calculate_p_dict(c(0.1, 0.5, 0.9), c(0.7, 1.2)),
+    matrix(c(0, 1, 2,
+             0, 1, 2),
+           ncol=2))
+
+})

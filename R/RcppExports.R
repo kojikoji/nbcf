@@ -5,6 +5,10 @@ rcpp_calculate_count_dict <- function(count_vec) {
     .Call(`_nbcf_rcpp_calculate_count_dict`, count_vec)
 }
 
+rcpp_calculate_p_dict <- function(p_vec, mean_bias_vec) {
+    .Call(`_nbcf_rcpp_calculate_p_dict`, p_vec, mean_bias_vec)
+}
+
 rcpp_hello_world <- function() {
     .Call(`_nbcf_rcpp_hello_world`)
 }

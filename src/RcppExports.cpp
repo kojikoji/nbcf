@@ -17,6 +17,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_calculate_p_dict
+Eigen::MatrixXi rcpp_calculate_p_dict(const Eigen::Map<Eigen::VectorXd> p_vec, const Eigen::Map<Eigen::VectorXd> mean_bias_vec);
+RcppExport SEXP _nbcf_rcpp_calculate_p_dict(SEXP p_vecSEXP, SEXP mean_bias_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd> >::type p_vec(p_vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::Map<Eigen::VectorXd> >::type mean_bias_vec(mean_bias_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_calculate_p_dict(p_vec, mean_bias_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_hello_world
 List rcpp_hello_world();
 RcppExport SEXP _nbcf_rcpp_hello_world() {
@@ -30,6 +42,7 @@ END_RCPP
 
 static const R_CallMethodDef CallEntries[] = {
     {"_nbcf_rcpp_calculate_count_dict", (DL_FUNC) &_nbcf_rcpp_calculate_count_dict, 1},
+    {"_nbcf_rcpp_calculate_p_dict", (DL_FUNC) &_nbcf_rcpp_calculate_p_dict, 2},
     {"_nbcf_rcpp_hello_world", (DL_FUNC) &_nbcf_rcpp_hello_world, 0},
     {NULL, NULL, 0}
 };
