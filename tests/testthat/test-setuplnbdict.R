@@ -20,3 +20,11 @@ test_that("count.dict from calculateCountDict is correct", {
               c(0, 0, 3, 3, 3, 6, 6))
 })
   
+test_that("p.vec from calculatePvec is correct", {
+  expect_equal(length(calculatePvec(10)),
+               10)
+  expect_equal(calculatePvec(10)[1],
+               0)
+  expect_equal(calculatePvec(10)[10],
+               1)
+})

@@ -65,3 +65,32 @@ calculateCountDict <- function(count.vec){
   count.dict <- rcpp_calculate_count_dict(as.integer(count.vec))
   return(count.dict)
 }
+
+##' Calculation for grid points of p
+##'
+##' These grids points are concentrated on 0 or 1. Use quadratic grids (Ferrer et al. 2016)
+##' @title calculatePvec
+##' @param p.res Integer, Approximation resolution of p
+##' @return p.vec Numeric vector, Grid points for p
+##' @author Yasuhiro Kojima
+calculatePvec <- function(p.res){
+  p.vec <- vector()
+  p.vec[1] <- 0
+  for(i in seq(p.res-1)){
+    x = i/p.res
+    p.vec[i+1] <- p.vec[i] + x*(1-x)
+  }
+  p.vec <- p.vec/p.vec[length(p.vec)]
+  return(p.vec)
+}
+##' Calculate p dictionary from each observation grid to grids corrected for mean.bias.vec
+##'
+##' We have to calculate negative binomial probability to p corrected for mean.bias.vec Hence, we need to use conversion before after correction.
+##' @title calculatePvec
+##' @param p.res Integer, Approximation resolution of p
+##' @return p.dict Numeric matrix, conversion index form each grid point in each observation to reference grid points. each row represents grid point. each column represents each observation.
+##' @author Yasuhiro Kojima
+calculatePdict <- function(p.vec, mean.bias.vec){
+  p.dict <- rcpp_calculate_pdict(p.vec, mean.bias.vec)
+  return(p.dict)
+}
