@@ -4,14 +4,14 @@
 \alias{setupLnbDict}
 \title{setupLnbDict}
 \usage{
-setupLnbDict(count.mat, p.res, count.res, mean.bias.vec)
+setupLnbDict(count.max, p.res, count.res, mean.bias.vec)
 }
 \arguments{
-\item{count.mat}{Count matrix. Each row represent each variate. Each column represent each observation}
+\item{count.max}{Max values of \code{count.mat} in \code{link{Nbcd}}}
 
 \item{p.res}{Approximation resolution of parameter p}
 
-\item{count.res}{Approximation resolution of count.}
+\item{count.res}{Approximation resolution of count}
 
 \item{mean.bias.vec}{Relative mean bias for each observation}
 }
