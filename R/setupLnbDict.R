@@ -5,18 +5,18 @@
 ##' @title setupLnbDict
 ##' @param count.max dgCMatrix, Max values of \code{count.mat} in \code{link{Nbcd}}
 ##' @param mean.bias.vec Numeric vecotor, Relative mean bias for each observation 
-##' @param p.res Integer, Approximation resolution of parameter p 
 ##' @param count.res Integer, Approximation resolution of count
+##' @param p.res Integer, Approximation resolution of parameter p 
 ##' @return lnbdict Instance of class \code{\link{LnbDict}}
 ##' @seealso [LnbDict]
 ##' @author Yasuhiro Kojima
 
-setupLnbDict <- function(count.max, p.res, count.res, mean.bias.vec){
+setupLnbDict <- function(count.max, count.res, p.res, mean.bias.vec){
   count.vec <- calculateCountVec(count.max, count.res)
   count.dict <- calculateCountDict(count.vec)
   p.vec <- calculatePvec(p.res)
   p.dict <- calculatePdict(p.vec, mean.bias.vec)
-  lnb.values <- calculateLnbValue(p.vec, count.vec)
+  lnb.values <- calculateLnbValue(count.vec, p.vec)
   lnbdict <- new("LnbDict", values=lnb.values, count.dict=count.dict, p.dict=p.dict)
   return(lnbdict)
 }
