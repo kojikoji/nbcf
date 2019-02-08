@@ -20,3 +20,36 @@ setupLnbDict <- function(count.max, p.res, count.res, mean.bias.vec){
   lnbdict <- new("LnbDict", values=lnb.values, count.dict=count.dict, p.dict=p.dict)
   return(lnbdict)
 }
+
+##' Chose count values for approximation
+##'
+##' Chose \code{count.res} count values from 0 ~ \code{max(count.mat)} for approximation. This chose all values up to min(continuos.upper, max(count.mat)) and chose other values based on bining of log(count).
+##' @title calculateCountVec
+##' @param count.max Max values of \code{count.mat} in \code{link{Nbcd}}
+##' @param count.res Approximation resolution of count
+##' @return count.vec Selected count grid points
+##' @author Yasuhiro Kojima
+
+calculateCountVec <- function(count.max, count.res, continuous.upper=300){
+  if(count.max < count.res) return(seq(0, count.max))
+  # continuous value are selected until upper
+  continuous.upper <- min(count.max, continuous.upper)
+  continuous.vec <- seq(0, continuous.upper)
+  if(continuous.upper < count.res){
+    ## over the threshold we select values from continuous + 1 to max.count
+    ## at regular interval based on log scale
+    large.grid.num <- count.res - length(continuous.vec)
+    log.max.val <- log(count.max)
+    log.min.val <- log(continuous.upper + 1)
+    log.large.vec <- seq(log.min.val, log.max.val, length.out = large.grid.num)
+    large.vec <- round(exp(log.large.vec))
+    ## return values are concatenated above continuous and selected values
+    count.vec <- c(continuous.vec, large.vec)
+  }else{
+    ## if continuous.upper is larger than count.res,
+    ## this return 0 ~ continuous.upper
+    count.vec <- seq(0, count.res -1)
+    warning(paste("Count values over", count.res, "will be approximated to", count.res))
+  }   
+  return(count.vec)
+}
