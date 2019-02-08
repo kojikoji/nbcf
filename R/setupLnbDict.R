@@ -15,7 +15,7 @@ setupLnbDict <- function(count.max, p.res, count.res, mean.bias.vec){
   count.vec <- calculateCountVec(count.max, count.res)
   count.dict <- calculateCountDict(count.vec)
   p.vec <- calculatePvec(p.res)
-  p.dict <- calculatePdict(p.vec, mean.bias)
+  p.dict <- calculatePdict(p.vec, mean.bias.vec)
   lnb.values <- calculateLnbValue(p.vec, count.vec)
   lnbdict <- new("LnbDict", values=lnb.values, count.dict=count.dict, p.dict=p.dict)
   return(lnbdict)
