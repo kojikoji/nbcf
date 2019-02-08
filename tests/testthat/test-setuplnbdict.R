@@ -14,4 +14,9 @@ test_that("count.vec from calculateCountVec is correct", {
   expect_equal(calculateCountVec(8, 5, 0), c(0, 1, 2, 4, 8))
   expect_equal(calculateCountVec(9, 4+1, 2), c(0, 1, 2, 3, 9))
 })
+
+test_that("count.dict from calculateCountDict is correct", {
+  expect_equal(calculateCountDict(as.integer(c(0, 3, 6))),
+              c(0, 0, 3, 3, 3, 6, 6))
+})
   

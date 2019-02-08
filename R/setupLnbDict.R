@@ -47,9 +47,21 @@ calculateCountVec <- function(count.max, count.res, continuous.upper=300){
     count.vec <- c(continuous.vec, large.vec)
   }else{
     ## if continuous.upper is larger than count.res,
-    ## this return 0 ~ continuous.upper
-    count.vec <- seq(0, count.res -1)
-    warning(paste("Count values over", count.res, "will be approximated to", count.res))
+    ## this return 0 ~ continuous.upper-2, max.val
+    count.vec <- c(seq(0, count.res -2), count.max)
+    warning(paste("Count values over", count.res, "will be approximated to", count.res,"or", count.max))
   }   
   return(count.vec)
+}
+
+##' Calculate count dictionary
+##'
+##' count dictionary is conversion vector from raw count to approximated count
+##' @title calculateCountDict
+##' @param count.vec Interger vector, Selected count grid points
+##' @return count.dict
+##' @author Yasuhiro Kojima
+calculateCountDict <- function(count.vec){
+  count.dict <- rcpp_calculate_count_dict(as.integer(count.vec))
+  return(count.dict)
 }
