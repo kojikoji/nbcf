@@ -54,7 +54,7 @@ calculateCountVec <- function(count.max, count.res, continuous.upper=300){
   return(count.vec)
 }
 
-##' Calculate count dictionary
+##' Calculate count dictionary from row value to approximated points
 ##'
 ##' count dictionary is conversion vector from raw count to approximated count
 ##' @title calculateCountDict
