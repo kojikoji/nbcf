@@ -11,22 +11,22 @@ You should firstly apply calculateQt and after either perfectSimulation or estim
 \section{Slots}{
 
 \describe{
-\item{\code{count.mat}}{This is a sparse countmatrix (dgCMatrix), whose rows represent time, and columns represent variate.}
+\item{\code{count.mat}}{dgCMatrix, whose rows represent time, and columns represent variate.}
 
-\item{\code{t.vec}}{This is a numeric vector, whose elements represent observed time corresponding to each row of count matrix.}
+\item{\code{t.vec}}{Numeric vector, whose elements represent observed time corresponding to each row of count matrix.}
 
-\item{\code{mean.bias.vec}}{This is a numeric vector, whose elements represent expted bias for mean value of each row.}
+\item{\code{mean.bias.vec}}{Numeric vector, whose elements represent expted bias for mean value of each row.}
 
-\item{\code{params}}{This is a named list of parameters, whose mebers must be "lambda", "r", "alpha" and "beta".}
+\item{\code{params}}{List, named list of parameters, whose mebers must be "lambda", "r", "alpha" and "beta".}
 
-\item{\code{lnb.dict}}{Storage for precomputated log negative binomial probability. This is a instance of  \code{\link{LnbDict}}.}
+\item{\code{lnb.dict}}{LnbDict, Storage for precomputated log negative binomial probability. This is a instance of  \code{\link{LnbDict}}.}
 
-\item{\code{Qt}}{probability of Yt:n given there is change point in t-1}
+\item{\code{Numeric}}{vector, Qt probability of Yt:n given there is change point in t-1}
 
-\item{\code{sim.change.point}}{change points simulated from perfectSimulation}
+\item{\code{Numeric}}{vector, sim.change.point change points simulated from perfectSimulation}
 
-\item{\code{map.change.point}}{change points simulated from estimateMap}
+\item{\code{Numeric.vector,}}{map.change.point change points simulated from estimateMap}
 
-\item{\code{change.variate}}{named list of changed variates for each map.change.points}
+\item{\code{Character}}{vector, change.variate named list of changed variates for each map.change.points}
 }}
 

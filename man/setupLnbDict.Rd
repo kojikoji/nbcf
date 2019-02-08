@@ -7,13 +7,13 @@
 setupLnbDict(count.max, p.res, count.res, mean.bias.vec)
 }
 \arguments{
-\item{count.max}{Max values of \code{count.mat} in \code{link{Nbcd}}}
+\item{count.max}{dgCMatrix, Max values of \code{count.mat} in \code{link{Nbcd}}}
 
-\item{p.res}{Approximation resolution of parameter p}
+\item{p.res}{Integer, Approximation resolution of parameter p}
 
-\item{count.res}{Approximation resolution of count}
+\item{count.res}{Integer, Approximation resolution of count}
 
-\item{mean.bias.vec}{Relative mean bias for each observation}
+\item{mean.bias.vec}{Numeric vecotor, Relative mean bias for each observation}
 }
 \value{
 lnbdict Instance of class \code{\link{LnbDict}}

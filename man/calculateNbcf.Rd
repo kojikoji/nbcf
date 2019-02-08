@@ -9,28 +9,28 @@ calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
   t.res = 100)
 }
 \arguments{
-\item{count.mat}{Count matrix. Each row represent each variate. Each column represent each observation}
+\item{count.mat}{dgCmatrix, Count matrix. Each row represent each variate. Each column represent each observation}
 
-\item{t.vec}{Observation time}
+\item{t.vec}{Numeric vector, Observation time}
 
-\item{mean.bias.vec}{Relative mean bias for each observation}
+\item{mean.bias.vec}{Numeric vector, Relative mean bias for each observation}
 
-\item{alpha}{Parameter fo beta distribution, which is prior for p of negative binomial distribution}
+\item{alpha}{Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution}
 
-\item{beta}{Parameter fo beta distribution, which is prior for p of negative binomial distribution}
+\item{beta}{Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution}
 
-\item{r}{Size parameters of negative binomial distribution.}
+\item{r}{Numeric, Size parameters of negative binomial distribution.}
 
-\item{lambda}{Prior probability the change point occur each step}
+\item{lambda}{Numeric, Prior probability the change point occur each step}
 
-\item{p.res}{Approximation resolution of parameter p}
+\item{p.res}{Integer, Approximation resolution of parameter p}
 
-\item{count.res}{Approximation resolution of count.}
+\item{count.res}{Integer, Approximation resolution of count.}
 
-\item{t.res}{Approximation resolution of t.}
+\item{t.res}{Integer, Approximation resolution of t.}
 }
 \value{
-nbcf Instance of class \code{\link{Nbcf}}
+Nbcf, nbcf Instance of class \code{\link{Nbcf}}
 }
 \description{
 Function for detecting change points and changed variates

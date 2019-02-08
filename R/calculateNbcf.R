@@ -3,17 +3,17 @@
 ##' This function is responsible for main calculation of this package. This calculate simulated change points and MAP estimates of them, and detect variates which significantly changed between each MAP estimated change points.
 ##' 
 ##' @title calculateNbcf
-##' @param count.mat Count matrix. Each row represent each variate. Each column represent each observation
-##' @param t.vec Observation time
-##' @param mean.bias.vec Relative mean bias for each observation 
-##' @param alpha Parameter fo beta distribution, which is prior for p of negative binomial distribution
-##' @param beta Parameter fo beta distribution, which is prior for p of negative binomial distribution
-##' @param r Size parameters of negative binomial distribution. 
-##' @param lambda Prior probability the change point occur each step
-##' @param p.res Approximation resolution of parameter p
-##' @param count.res Approximation resolution of count.
-##' @param t.res Approximation resolution of t.
-##' @return nbcf Instance of class \code{\link{Nbcf}}
+##' @param count.mat dgCmatrix, Count matrix. Each row represent each variate. Each column represent each observation
+##' @param t.vec Numeric vector, Observation time
+##' @param mean.bias.vec Numeric vector, Relative mean bias for each observation 
+##' @param alpha Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution
+##' @param beta Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution
+##' @param r Numeric, Size parameters of negative binomial distribution. 
+##' @param lambda Numeric, Prior probability the change point occur each step
+##' @param p.res Integer, Approximation resolution of parameter p
+##' @param count.res Integer, Approximation resolution of count.
+##' @param t.res Integer, Approximation resolution of t.
+##' @return Nbcf, nbcf Instance of class \code{\link{Nbcf}}
 ##' @seealso [Nbcf]
 ##' @author Yasuhiro Kojima
 

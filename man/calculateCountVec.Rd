@@ -7,12 +7,12 @@
 calculateCountVec(count.max, count.res, continuous.upper = 300)
 }
 \arguments{
-\item{count.max}{Max values of \code{count.mat} in \code{link{Nbcd}}}
+\item{count.max}{Integer, Max values of \code{count.mat} in \code{link{Nbcd}}}
 
-\item{count.res}{Approximation resolution of count}
+\item{count.res}{Integer, Approximation resolution of count}
 }
 \value{
-count.vec Selected count grid points
+count.vec Interger vector, Selected count grid points
 }
 \description{
 Chose count values for approximation

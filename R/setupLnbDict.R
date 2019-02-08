@@ -3,10 +3,10 @@
 ##'
 ##' This function is responsible for generating instance of \code{\link{LnbDict}}. This involves calculate negative binomial probability for grid points of count and p. Futhermore, this calculate index conversion for count and p (see details in \code{\link{LnbDict}}.
 ##' @title setupLnbDict
-##' @param count.max Max values of \code{count.mat} in \code{link{Nbcd}}
-##' @param mean.bias.vec Relative mean bias for each observation 
-##' @param p.res Approximation resolution of parameter p 
-##' @param count.res Approximation resolution of count
+##' @param count.max dgCMatrix, Max values of \code{count.mat} in \code{link{Nbcd}}
+##' @param mean.bias.vec Numeric vecotor, Relative mean bias for each observation 
+##' @param p.res Integer, Approximation resolution of parameter p 
+##' @param count.res Integer, Approximation resolution of count
 ##' @return lnbdict Instance of class \code{\link{LnbDict}}
 ##' @seealso [LnbDict]
 ##' @author Yasuhiro Kojima
@@ -25,9 +25,9 @@ setupLnbDict <- function(count.max, p.res, count.res, mean.bias.vec){
 ##'
 ##' Chose \code{count.res} count values from 0 ~ \code{max(count.mat)} for approximation. This chose all values up to min(continuos.upper, max(count.mat)) and chose other values based on bining of log(count).
 ##' @title calculateCountVec
-##' @param count.max Max values of \code{count.mat} in \code{link{Nbcd}}
-##' @param count.res Approximation resolution of count
-##' @return count.vec Selected count grid points
+##' @param count.max Integer, Max values of \code{count.mat} in \code{link{Nbcd}}
+##' @param count.res Integer, Approximation resolution of count
+##' @return count.vec Interger vector, Selected count grid points
 ##' @author Yasuhiro Kojima
 
 calculateCountVec <- function(count.max, count.res, continuous.upper=300){
