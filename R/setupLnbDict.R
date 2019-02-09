@@ -105,7 +105,7 @@ calculatePdict <- function(p.vec, mean.bias.vec){
 ##' @param count.vec Interger vector, Selected count grid points
 ##' @param p.vec Interger vector, Selected p grid points
 ##' @param r Numeric, Size parameters of negative binomial distribution. 
-##' @return lnb.mat
+##' @return lnb.mat Numeric matrix, log negative binomial probability. Columns and rows correspond to grid points of count and p
 ##' @author Yasuhiro Kojima
 calculateLnbValues <- function(count.vec, p.vec, r){
   lnb.mat <- rcpp_calculate_lnb_values(count.vec, p.vec, r)

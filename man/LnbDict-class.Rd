@@ -13,7 +13,7 @@ This class is a storage for precomputated log negative binomial probability. Thi
 \section{Slots}{
 
 \describe{
-\item{\code{values}}{A matrix storaging negative binomial probability. Each row and column represent each value of count and value of p.}
+\item{\code{values}}{Numeric Matrix, This storage log negative binomial probability. Each column and row represent each grid of count and p.}
 
 \item{\code{count.dict}}{This is a sparse vector each elements have the row index of \code{value} cressponding the count represented by index of this vector}
 

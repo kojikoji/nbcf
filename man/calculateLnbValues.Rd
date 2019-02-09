@@ -14,7 +14,7 @@ calculateLnbValues(count.vec, p.vec, r)
 \item{r}{Numeric, Size parameters of negative binomial distribution.}
 }
 \value{
-lnb.mat
+lnb.mat Numeric matrix, log negative binomial probability. Columns and rows correspond to grid points of count and p
 }
 \description{
 Calculate the probability value of log negative binomial distribution

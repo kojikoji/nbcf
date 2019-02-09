@@ -18,7 +18,7 @@ setupLnbDict(count.max, mean.bias.vec, r, count.res, p.res)
 \item{p.res}{Integer, Approximation resolution of parameter p}
 }
 \value{
-lnbdict Instance of class \code{\link{LnbDict}}
+lnb.dict Instance of class \code{\link{LnbDict}}
 }
 \description{
 Set up \code{\link{LnbDict}} instance
