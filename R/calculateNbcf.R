@@ -23,15 +23,15 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
   ## count.mat is ordered based on t.vec 
   count.mat <- count.mat[, order(t.vec)]
-  Pst <- calculatePst(lnb.dict, count.mat, t.vec, t.grids)
-  Qt <- calculateQt(Pst, lambda)
-  sim.change.point <- perfectSimulation(Qt, Pst, lambda)
-  map.change.point <- estimateMap(Qt, Pst, lambda)
+  lpst <- calculateLpst(lnb.dict, count.mat, t.vec, t.grids)
+  lqt <- calculateLqt(lpst, lambda)
+  sim.change.point <- perfectSimulation(lqt, lpst, lambda)
+  map.change.point <- estimateMap(lqt, Pst, lambda)
   change.variate <- detectVariate(map.change.point, count.mat, lnb.dict)
   nbcf <- new("Nbcf", count.mat=count.mat, t.vec=t.vec, mean.bias.vec=mean.bias.vec,
                   params=list(alpha=alpha, beta=beta, r=r, lambda=lambda,
                               p.res=p.res, count.res=count.res),
-                  lnb.dict=lnb.dict, Pst=Pst, Qt=Qt,
+                  lnb.dict=lnb.dict, lpst=lpst, lqt=lqt,
                   sim.change.point=sim.change.point, map.change.point=map.change.poin,
                   change.variate=change.variate)
   return(nbcf)

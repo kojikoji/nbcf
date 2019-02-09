@@ -11,10 +11,11 @@
 ##' @slot mean.bias.vec Numeric vector, whose elements represent expted bias for mean value of each row.
 ##' @slot params List, named list of parameters, whose mebers must be "lambda", "r", "alpha" and "beta".
 ##' @slot lnb.dict LnbDict, Storage for precomputated log negative binomial probability. This is a instance of  \code{\link{LnbDict}}.
-##' @slot Numeric vector, Qt probability of Yt:n given there is change point in t-1
-##' @slot Numeric vector, sim.change.point change points simulated from perfectSimulation
-##' @slot Numeric.vector, map.change.point change points simulated from estimateMap
-##' @slot Character vector, change.variate named list of changed variates for each map.change.points
+##' @slot lpst Numeric matrix, log probability of Ys:t
+##' @slot lqt Numeric vector, log probability of Yt:n given there is change point in t-1
+##' @slot sim.change.point Numeric vector, change points simulated from perfectSimulation
+##' @slot map.change.point Numeric.vector, change points simulated from estimateMap
+##' @slot change.variate Character vector, named list of changed variates for each map.change.points
 ##'
 ##' @import Matrix
 
@@ -26,8 +27,8 @@ setClass(
     mean.bias.vec="vector",
     params="list",
     lnb.dict.mat="list",
-    Qt="vector",
-    Pst="matrix",
+    lt="vector",
+    lpst="matrix",
     sim.change.point = "vector",
     map.change.point = "vector",
     change.variate = "list"
