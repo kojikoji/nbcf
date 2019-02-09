@@ -19,7 +19,11 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
                           p.res=1000, count.res=1000, t.res=100){
   lnb.dict <- setupLnbDict(count.mat, mean.bias.vec, r, alpha, beta, count.res, p.res)
-  Pst <- calculatePst(lnb.dict.mat, count.mat, t.res)
+  ## t.grids will seprate observation into t.res bins
+  t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
+  ## count.mat is ordered based on t.vec 
+  count.mat <- count.mat[, order(t.vec)]
+  Pst <- calculatePst(lnb.dict, count.mat, t.vec, t.grids)
   Qt <- calculateQt(Pst, lambda)
   sim.change.point <- perfectSimulation(Qt, Pst, lambda)
   map.change.point <- estimateMap(Qt, Pst, lambda)
