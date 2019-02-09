@@ -13,18 +13,23 @@ VectorXd fix_p_vec(VectorXd p_vec, double mean_bias){
 VectorXi get_approximate_index(VectorXd original_vec, VectorXd approximate_vec){
   VectorXi approximate_index(original_vec.size());
   // initialize grid bound
+  // We select two grids between which each original values are
   double grid_lower = approximate_vec(0);
   double grid_upper = approximate_vec(1);
   int grid_upper_index = 1;
   for(int i = 0; i < original_vec.size(); i++){
+    // Once a value of original exceeds max of approximated,
+    // left values (bigger ones) are all approximated max of approximated
     if(original_vec(i) > approximate_vec.maxCoeff()){
       approximate_index(i) = approximate_vec.size() - 1;
       continue;
     }
     if(original_vec(i) > grid_upper){
+      // Shift grid
       grid_lower = grid_upper;
       grid_upper = approximate_vec(++grid_upper_index);
     }
+    // Chose lower or upper grid
     if(original_vec(i) - grid_lower < grid_upper - original_vec(i)){
       approximate_index(i) = grid_upper_index -1;
     }else{
