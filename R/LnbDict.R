@@ -17,6 +17,6 @@ setClass(
   "LnbDict",
   representation(
     values="matrix",
-    count.dict="dgCMatrix",
+    count.dict="vector",
     p.dict="matrix")
 )

@@ -8,7 +8,7 @@
 ##' @param r Numeric, Size parameters of negative binomial distribution. 
 ##' @param count.res Integer, Approximation resolution of count
 ##' @param p.res Integer, Approximation resolution of parameter p 
-##' @return lnbdict Instance of class \code{\link{LnbDict}}
+##' @return lnb.dict Instance of class \code{\link{LnbDict}}
 ##' @seealso [LnbDict]
 ##' @author Yasuhiro Kojima
 
@@ -18,8 +18,8 @@ setupLnbDict <- function(count.max, mean.bias.vec, r, count.res, p.res){
   p.vec <- calculatePvec(p.res)
   p.dict <- calculatePdict(p.vec, mean.bias.vec)
   lnb.values <- calculateLnbValues(count.vec, p.vec, r)
-  lnbdict <- new("LnbDict", values=lnb.values, count.dict=count.dict, p.dict=p.dict)
-  return(lnbdict)
+  lnb.dict <- new("LnbDict", values=lnb.values, count.dict=count.dict, p.dict=p.dict)
+  return(lnb.dict)
 }
 
 ##' Chose count values for approximation

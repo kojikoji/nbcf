@@ -47,3 +47,22 @@ test_that("lnb probability from calculateLnbValues is correct", {
   expect_equal(
     lnb.values[1, 2], log(dnbinom(10, 30, 1 - 0.5)))    
 })
+
+test_that("setupLnbDict work well", {
+  lnb.dict <- setupLnbDict(1000, runif(800, 0.8, 1.2),  30, 500, 300)
+  expect_equal(
+    dim(lnb.dict@values),
+    c(500, 300))
+  expect_gte(
+    min(exp(lnb.dict@values)),
+    0)
+  expect_lte(
+    max(exp(lnb.dict@values)),
+    1)
+  expect_equal(
+    length(lnb.dict@count.dict),
+    1001)
+  expect_equal(
+    dim(lnb.dict@p.dict),
+    c(300, 800))
+})
