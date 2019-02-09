@@ -49,7 +49,8 @@ test_that("lnb probability from calculateLnbValues is correct", {
 })
 
 test_that("setupLnbDict work well", {
-  lnb.dict <- setupLnbDict(1000, runif(800, 0.8, 1.2),  30, 500, 300)
+  lnb.dict <- setupLnbDict(1000, mean.bias.vec=runif(800, 0.8, 1.2),
+                           r=30, alpha=2, beta=2, count.res=500, p.res=300)
   expect_equal(
     dim(lnb.dict@values),
     c(300, 500))
@@ -65,4 +66,10 @@ test_that("setupLnbDict work well", {
   expect_equal(
     dim(lnb.dict@p.dict),
     c(300, 800))
+  expect_equal(
+    nrow(lnb.dict@p.dict),
+    length(lnb.dict@lprior.values))
+  expect_gte(
+    min(exp(lnb.dict@lprior.values)),
+    0)
 })

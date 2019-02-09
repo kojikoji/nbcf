@@ -1,24 +1,27 @@
 
 ##' Set up \code{\link{LnbDict}} instance
 ##'
-##' This function is responsible for generating instance of \code{\link{LnbDict}}. This involves calculate negative binomial probability for grid points of count and p. Futhermore, this calculate index conversion for count and p (see details in \code{\link{LnbDict}}.
+##' This function is responsible for generating instance of \code{\link{LnbDict}}. This involves calculate negative binomial probability for grid points of count and p. Futhermore, this calculate index conversion for count and p (see details in \code{\link{LnbDict}}. This also calculate log prior values for \code{p.vec}.
 ##' @title setupLnbDict
 ##' @param count.max dgCMatrix, Max values of \code{count.mat} in \code{link{Nbcd}}
 ##' @param mean.bias.vec Numeric vecotor, Relative mean bias for each observation 
 ##' @param r Numeric, Size parameters of negative binomial distribution. 
+##' @param alpha Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution
+##' @param beta Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution
 ##' @param count.res Integer, Approximation resolution of count
 ##' @param p.res Integer, Approximation resolution of parameter p 
 ##' @return lnb.dict Instance of class \code{\link{LnbDict}}
 ##' @seealso [LnbDict]
 ##' @author Yasuhiro Kojima
 
-setupLnbDict <- function(count.max, mean.bias.vec, r, count.res, p.res){
+setupLnbDict <- function(count.max, mean.bias.vec, r, alpha, beta, count.res, p.res){
   count.vec <- calculateCountVec(count.max, count.res)
   count.dict <- calculateCountDict(count.vec)
   p.vec <- calculatePvec(p.res)
   p.dict <- calculatePdict(p.vec, mean.bias.vec)
   lnb.values <- calculateLnbValues(count.vec, p.vec, r)
-  lnb.dict <- new("LnbDict", values=lnb.values, count.dict=count.dict, p.dict=p.dict)
+  lprior.values <- log(dbeta(p.vec, alpha, beta))
+  lnb.dict <- new("LnbDict", values=lnb.values, lprior.values=lprior.values, count.dict=count.dict, p.dict=p.dict)
   return(lnb.dict)
 }
 
@@ -103,7 +106,7 @@ calculatePdict <- function(p.vec, mean.bias.vec){
 ##' The values are calculated for each count (row) and p (column)
 ##' @title calculateLnbValues
 ##' @param count.vec Interger vector, Selected count grid points
-##' @param p.vec Interger vector, Selected p grid points
+##' @param p.vec Numeric vector, Selected p grid points
 ##' @param r Numeric, Size parameters of negative binomial distribution. 
 ##' @return lnb.mat Numeric matrix, log negative binomial probability. Columns and rows correspond to grid points of count and p
 ##' @author Yasuhiro Kojima
