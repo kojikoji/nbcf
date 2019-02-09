@@ -4,16 +4,18 @@
 \alias{setupLnbDict}
 \title{setupLnbDict}
 \usage{
-setupLnbDict(count.max, count.res, p.res, mean.bias.vec)
+setupLnbDict(count.max, mean.bias.vec, r, count.res, p.res)
 }
 \arguments{
 \item{count.max}{dgCMatrix, Max values of \code{count.mat} in \code{link{Nbcd}}}
 
+\item{mean.bias.vec}{Numeric vecotor, Relative mean bias for each observation}
+
+\item{r}{Numeric, Size parameters of negative binomial distribution.}
+
 \item{count.res}{Integer, Approximation resolution of count}
 
 \item{p.res}{Integer, Approximation resolution of parameter p}
-
-\item{mean.bias.vec}{Numeric vecotor, Relative mean bias for each observation}
 }
 \value{
 lnbdict Instance of class \code{\link{LnbDict}}

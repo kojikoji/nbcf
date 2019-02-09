@@ -20,8 +20,8 @@
 calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
                           p.res=1000, count.res=1000, t.res=100){
-  lnb.dict <- setupLnbDict(count.mat, mean.bias.vec, p.res, count.res)
-  Pst <- calculatePst(lnb.dict.mat, count.mat, alpha, beta, r, t.res)
+  lnb.dict <- setupLnbDict(count.mat, mean.bias.vec, r, count.res, p.res)
+  Pst <- calculatePst(lnb.dict.mat, count.mat, alpha, beta, t.res)
   Qt <- calculateQt(Pst, lambda)
   sim.change.point <- perfectSimulation(Qt, Pst, lambda)
   map.change.point <- estimateMap(Qt, Pst, lambda)

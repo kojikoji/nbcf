@@ -5,18 +5,19 @@
 ##' @title setupLnbDict
 ##' @param count.max dgCMatrix, Max values of \code{count.mat} in \code{link{Nbcd}}
 ##' @param mean.bias.vec Numeric vecotor, Relative mean bias for each observation 
+##' @param r Numeric, Size parameters of negative binomial distribution. 
 ##' @param count.res Integer, Approximation resolution of count
 ##' @param p.res Integer, Approximation resolution of parameter p 
 ##' @return lnbdict Instance of class \code{\link{LnbDict}}
 ##' @seealso [LnbDict]
 ##' @author Yasuhiro Kojima
 
-setupLnbDict <- function(count.max, count.res, p.res, mean.bias.vec){
+setupLnbDict <- function(count.max, mean.bias.vec, r, count.res, p.res){
   count.vec <- calculateCountVec(count.max, count.res)
   count.dict <- calculateCountDict(count.vec)
   p.vec <- calculatePvec(p.res)
   p.dict <- calculatePdict(p.vec, mean.bias.vec)
-  lnb.values <- calculateLnbValues(count.vec, p.vec)
+  lnb.values <- calculateLnbValues(count.vec, p.vec, r)
   lnbdict <- new("LnbDict", values=lnb.values, count.dict=count.dict, p.dict=p.dict)
   return(lnbdict)
 }
@@ -103,6 +104,7 @@ calculatePdict <- function(p.vec, mean.bias.vec){
 ##' @title calculateLnbValues
 ##' @param count.vec Interger vector, Selected count grid points
 ##' @param p.vec Interger vector, Selected p grid points
+##' @param r Numeric, Size parameters of negative binomial distribution. 
 ##' @return lnb.mat
 ##' @author Yasuhiro Kojima
 calculateLnbValues <- function(count.vec, p.vec, r){
