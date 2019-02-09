@@ -29,6 +29,12 @@ test_that("p.vec from calculatePvec is correct", {
                1)
 })
 
+test_that("p.width.vec from calculatePwidthVec is correct", {
+  expect_equal(sum(calculatePwidthVec(seq(0, 1, by=0.1))),
+               1)
+                                  
+})
+
 test_that("p.dict from calculatePdict is correct", {
   expect_equal(dim(rcpp_calculate_p_dict(c(0.1, 0.5, 0.9), c(0.7, 1.2))),
                c(3, 2))

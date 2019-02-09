@@ -18,10 +18,11 @@ setupLnbDict <- function(count.max, mean.bias.vec, r, alpha, beta, count.res, p.
   count.vec <- calculateCountVec(count.max, count.res)
   count.dict <- calculateCountDict(count.vec)
   p.vec <- calculatePvec(p.res)
+  p.width.vec <- calculatePwidthVec(p.vec)
   p.dict <- calculatePdict(p.vec, mean.bias.vec)
   lnb.values <- calculateLnbValues(count.vec, p.vec, r)
   lprior.values <- log(dbeta(p.vec, alpha, beta))
-  lnb.dict <- new("LnbDict", values=lnb.values, lprior.values=lprior.values, count.dict=count.dict, p.dict=p.dict)
+  lnb.dict <- new("LnbDict", values=lnb.values, lprior.values=lprior.values, count.dict=count.dict, p.dict=p.dict, p.width.vec=p.width.vec)
   return(lnb.dict)
 }
 
@@ -86,6 +87,24 @@ calculatePvec <- function(p.res){
   }
   p.vec <- p.vec/p.vec[length(p.vec)]
   return(p.vec)
+}
+
+##' Calculation for grid width of p
+##'
+##' Calculation is based on \code{p.vec}
+##' @title calculatePwidthVec
+##' @param p.vec Numeric vector, Grid points for p
+##' @return p.width.vec grid width of p
+##' @author Yasuhiro Kojima
+calculatePwidthVec <- function(p.vec){
+  grid.num <- length(p.vec)
+  p.width.vec <- vector()
+  p.width.vec[1] <- (p.vec[2] - p.vec[1])/2
+  p.width.vec[grid.num] <- (p.vec[grid.num] - p.vec[grid.num - 1])/2
+  for(i in seq(2, grid.num - 1)){
+    p.width.vec[i] <- (p.vec[i+1] - p.vec[i])/2 + (p.vec[i] - p.vec[i-1])/2
+  }
+  return(p.width.vec)
 }
 
 ##' Calculate p dictionary from each observation grid to grids corrected for mean.bias.vec

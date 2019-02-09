@@ -10,6 +10,7 @@
 ##' @slot lprior.values Numeric vector, log prior probability values for each gridpoints
 ##' @slot count.dict This is a sparse vector each elements have the row index of \code{value} cressponding the count represented by index of this vector
 ##' @slot p.dict This is a dense matrix. Each element has a column index of \code{value} after correction against \code{\link[Nbcf]{mean.bias.vec}}. Each row represents index of p before correction. Each column represents observation index.
+##' @slot p.width.vec grid width of p
 ##' @author Yasuhiro Kojima
 ##' 
 ##' @import Matrix
@@ -20,5 +21,6 @@ setClass(
     values="matrix",
     lprior.values="vector",
     count.dict="vector",
-    p.dict="matrix")
+    p.dict="matrix",
+    p.width.vec="vector")
 )
