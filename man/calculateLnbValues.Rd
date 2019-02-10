@@ -9,7 +9,7 @@ calculateLnbValues(count.vec, p.vec, r)
 \arguments{
 \item{count.vec}{Interger vector, Selected count grid points}
 
-\item{p.vec}{Interger vector, Selected p grid points}
+\item{p.vec}{Numeric vector, Selected p grid points}
 
 \item{r}{Numeric, Size parameters of negative binomial distribution.}
 }

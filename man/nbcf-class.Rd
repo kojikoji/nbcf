@@ -21,12 +21,14 @@ You should firstly apply calculateQt and after either perfectSimulation or estim
 
 \item{\code{lnb.dict}}{LnbDict, Storage for precomputated log negative binomial probability. This is a instance of  \code{\link{LnbDict}}.}
 
-\item{\code{Numeric}}{vector, Qt probability of Yt:n given there is change point in t-1}
+\item{\code{lpst}}{Numeric matrix, log probability of Ys:t}
 
-\item{\code{Numeric}}{vector, sim.change.point change points simulated from perfectSimulation}
+\item{\code{lqt}}{Numeric vector, log probability of Yt:n given there is change point in t-1}
 
-\item{\code{Numeric.vector,}}{map.change.point change points simulated from estimateMap}
+\item{\code{sim.change.point}}{Numeric vector, change points simulated from perfectSimulation}
 
-\item{\code{Character}}{vector, change.variate named list of changed variates for each map.change.points}
+\item{\code{map.change.point}}{Numeric.vector, change points simulated from estimateMap}
+
+\item{\code{change.variate}}{Character vector, named list of changed variates for each map.change.points}
 }}
 

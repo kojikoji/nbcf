@@ -15,9 +15,13 @@ This class is a storage for precomputated log negative binomial probability. Thi
 \describe{
 \item{\code{values}}{Numeric Matrix, This storage log negative binomial probability. Each column and row represent each grid of count and p.}
 
+\item{\code{lprior.values}}{Numeric vector, log prior probability values for each gridpoints}
+
 \item{\code{count.dict}}{This is a sparse vector each elements have the row index of \code{value} cressponding the count represented by index of this vector}
 
 \item{\code{p.dict}}{This is a dense matrix. Each element has a column index of \code{value} after correction against \code{\link[Nbcf]{mean.bias.vec}}. Each row represents index of p before correction. Each column represents observation index.}
+
+\item{\code{p.width.vec}}{grid width of p}
 }}
 
 \author{

@@ -4,7 +4,7 @@
 \alias{setupLnbDict}
 \title{setupLnbDict}
 \usage{
-setupLnbDict(count.max, mean.bias.vec, r, count.res, p.res)
+setupLnbDict(count.max, mean.bias.vec, r, alpha, beta, count.res, p.res)
 }
 \arguments{
 \item{count.max}{dgCMatrix, Max values of \code{count.mat} in \code{link{Nbcd}}}
@@ -12,6 +12,10 @@ setupLnbDict(count.max, mean.bias.vec, r, count.res, p.res)
 \item{mean.bias.vec}{Numeric vecotor, Relative mean bias for each observation}
 
 \item{r}{Numeric, Size parameters of negative binomial distribution.}
+
+\item{alpha}{Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution}
+
+\item{beta}{Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution}
 
 \item{count.res}{Integer, Approximation resolution of count}
 
@@ -24,7 +28,7 @@ lnb.dict Instance of class \code{\link{LnbDict}}
 Set up \code{\link{LnbDict}} instance
 }
 \details{
-This function is responsible for generating instance of \code{\link{LnbDict}}. This involves calculate negative binomial probability for grid points of count and p. Futhermore, this calculate index conversion for count and p (see details in \code{\link{LnbDict}}.
+This function is responsible for generating instance of \code{\link{LnbDict}}. This involves calculate negative binomial probability for grid points of count and p. Futhermore, this calculate index conversion for count and p (see details in \code{\link{LnbDict}}. This also calculate log prior values for \code{p.vec}.
 }
 \seealso{
 [LnbDict]

@@ -15,10 +15,6 @@ calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
 
 \item{mean.bias.vec}{Numeric vector, Relative mean bias for each observation}
 
-\item{alpha}{Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution}
-
-\item{beta}{Numeric, Parameter fo beta distribution, which is prior for p of negative binomial distribution}
-
 \item{r}{Numeric, Size parameters of negative binomial distribution.}
 
 \item{lambda}{Numeric, Prior probability the change point occur each step}
