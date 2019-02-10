@@ -62,3 +62,11 @@ test_that("calculateLpst work well", {
               c(10, 10))
 })
 
+test_that("calculateQt work well", {
+  lpst <- matrix(runif(10*10, -1, -0.01), nrow=10)
+  lambda <- 0.1
+  lqt <- calculateLqt(lpst, lambda)
+  expect_equal(
+    length(lqt),
+    10)
+})
