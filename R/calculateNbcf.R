@@ -26,7 +26,7 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   lpst <- calculateLpst(lnb.dict, count.mat, t.vec, t.grids)
   lqt <- calculateLqt(lpst, lambda)
   sim.change.point <- perfectSimulation(lqt, lpst, lambda)
-  map.change.point <- estimateMap(lqt, Pst, lambda)
+  map.change.point <- estimateMap(lqt, lpst, lambda)
   change.variate <- detectVariate(map.change.point, count.mat, lnb.dict)
   nbcf <- new("Nbcf", count.mat=count.mat, t.vec=t.vec, mean.bias.vec=mean.bias.vec,
                   params=list(alpha=alpha, beta=beta, r=r, lambda=lambda,
