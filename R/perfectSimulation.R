@@ -16,8 +16,11 @@ perfectSimulation <- function(lqt, lpst, lambda, sim.iter=100){
     ct.vec <- vector()
     current.ct <- 0
     while(current.ct < t.max){
-      ## as.character used because use 0 index
-      current.ct <- sample(seq(current.ct + 1, t.max), 1, prob=transition.prob.list[[as.character(current.ct)]])
+      ## when current.ct == t.max, sample do not work
+      current.ct <- ifelse(
+        current.ct < t.max - 1,
+        sample(seq(current.ct + 1, t.max), 1, prob=transition.prob.list[[as.character(current.ct)]]), ## as.character used because use 0 index
+        t.max)
       ct.vec <- c(ct.vec, current.ct)
     }
     change.points.list[[i]] <- ct.vec
@@ -39,9 +42,14 @@ calculateCtTransitionProb <- function(lqt, lpst, lambda){
   t.max <- length(lqt)
   transition.prob.list <- list()
   for(pre.ct in seq(0, t.max-1)){
-    lprob.vec <- unlist(purrr::map((pre.ct+1):(t.max-1),
-                            ~ lpst[(pre.ct+1),.x] + (.x - pre.ct) * log(1-lambda) +
-                              log(lambda) + lqt[.x + 1]))
+    ## when pre.t = t.max -1, there is no futhre change
+    if(pre.ct < t.max -1){
+      lprob.vec <- unlist(purrr::map((pre.ct+1):(t.max-1),
+                                     ~ lpst[(pre.ct+1),.x] + (.x - pre.ct) * log(1-lambda) +
+                                       log(lambda) + lqt[.x + 1]))
+    }else{
+      lprob.vec <- c()
+    }
     non.change.lprob <- lpst[(pre.ct + 1), t.max] + (t.max - pre.ct) * log(1 - lambda)
     lprob.vec <- c(lprob.vec, non.change.lprob)
     regulalize <- function(vec) vec/sum(vec)

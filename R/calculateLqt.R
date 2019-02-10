@@ -14,8 +14,8 @@ calculateLqt <- function(lpst, lambda){
   for(t in seq(t_len - 1, 1)){
     lqt_vec <- unlist(purrr::map(
                                t:(t_len-1),
-                               ~ lqt[.x + 1] + log(lambda) + (.x - t) * log(1 - lambda) + lpst[t:.x]))
-    no_change_lqt <- (t_len - t) * log(1 - lambda) + lpst[t_len:t]
+                               ~ lqt[.x + 1] + log(lambda) + (.x - t) * log(1 - lambda) + lpst[t,.x]))
+    no_change_lqt <- (t_len - t) * log(1 - lambda) + lpst[t, t_len]
     lqt_vec <- c(lqt_vec, no_change_lqt)
     lqt[t] <- logSumExp(lqt_vec)
   }
