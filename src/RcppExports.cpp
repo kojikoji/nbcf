@@ -30,6 +30,90 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// calculate_pt_grid_lp
+Eigen::MatrixXd calculate_pt_grid_lp(const Eigen::VectorXd& count_sp_vec, const Eigen::MatrixXd& grid_lnb_mat, const Eigen::VectorXi& count_dict, const Eigen::MatrixXi& p_dict, const Eigen::VectorXi& t_grids);
+RcppExport SEXP _nbcf_calculate_pt_grid_lp(SEXP count_sp_vecSEXP, SEXP grid_lnb_matSEXP, SEXP count_dictSEXP, SEXP p_dictSEXP, SEXP t_gridsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type count_sp_vec(count_sp_vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type grid_lnb_mat(grid_lnb_matSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type count_dict(count_dictSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXi& >::type p_dict(p_dictSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type t_grids(t_gridsSEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_pt_grid_lp(count_sp_vec, grid_lnb_mat, count_dict, p_dict, t_grids));
+    return rcpp_result_gen;
+END_RCPP
+}
+// accumulate_colwise
+Eigen::MatrixXd accumulate_colwise(const Eigen::MatrixXd& mat);
+RcppExport SEXP _nbcf_accumulate_colwise(SEXP matSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type mat(matSEXP);
+    rcpp_result_gen = Rcpp::wrap(accumulate_colwise(mat));
+    return rcpp_result_gen;
+END_RCPP
+}
+// log_sum_exp
+double log_sum_exp(const Eigen::VectorXd& vec, const Eigen::VectorXd& w_vec);
+RcppExport SEXP _nbcf_log_sum_exp(SEXP vecSEXP, SEXP w_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type vec(vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type w_vec(w_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(log_sum_exp(vec, w_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// colwise_log_sum_exp
+Eigen::VectorXd colwise_log_sum_exp(const Eigen::MatrixXd& mat, const Eigen::VectorXd& w_vec);
+RcppExport SEXP _nbcf_colwise_log_sum_exp(SEXP matSEXP, SEXP w_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type mat(matSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type w_vec(w_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(colwise_log_sum_exp(mat, w_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
+// calculate_lpst_g
+Eigen::MatrixXd calculate_lpst_g(const Eigen::VectorXd& count_sp_vec, const Eigen::MatrixXd& grid_lnb_mat, const Eigen::VectorXd& lprior_vec, const Eigen::VectorXi& count_dict, const Eigen::MatrixXi& p_dict, const Eigen::VectorXd& p_width_vec, const Eigen::VectorXi& t_grids);
+RcppExport SEXP _nbcf_calculate_lpst_g(SEXP count_sp_vecSEXP, SEXP grid_lnb_matSEXP, SEXP lprior_vecSEXP, SEXP count_dictSEXP, SEXP p_dictSEXP, SEXP p_width_vecSEXP, SEXP t_gridsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type count_sp_vec(count_sp_vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type grid_lnb_mat(grid_lnb_matSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type lprior_vec(lprior_vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type count_dict(count_dictSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXi& >::type p_dict(p_dictSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type p_width_vec(p_width_vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type t_grids(t_gridsSEXP);
+    rcpp_result_gen = Rcpp::wrap(calculate_lpst_g(count_sp_vec, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rcpp_calculate_lpst
+Eigen::MatrixXd rcpp_calculate_lpst(const Eigen::SparseMatrix<double>& count_sp_mat, const Eigen::MatrixXd& grid_lnb_mat, const Eigen::VectorXd& lprior_vec, const Eigen::VectorXi& count_dict, const Eigen::MatrixXi& p_dict, const Eigen::VectorXd& p_width_vec, const Eigen::VectorXi& t_grids);
+RcppExport SEXP _nbcf_rcpp_calculate_lpst(SEXP count_sp_matSEXP, SEXP grid_lnb_matSEXP, SEXP lprior_vecSEXP, SEXP count_dictSEXP, SEXP p_dictSEXP, SEXP p_width_vecSEXP, SEXP t_gridsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::SparseMatrix<double>& >::type count_sp_mat(count_sp_matSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type grid_lnb_mat(grid_lnb_matSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type lprior_vec(lprior_vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type count_dict(count_dictSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXi& >::type p_dict(p_dictSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type p_width_vec(p_width_vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type t_grids(t_gridsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_calculate_lpst(count_sp_mat, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_calculate_p_dict
 Eigen::MatrixXi rcpp_calculate_p_dict(const Eigen::Map<Eigen::VectorXd> p_vec, const Eigen::Map<Eigen::VectorXd> mean_bias_vec);
 RcppExport SEXP _nbcf_rcpp_calculate_p_dict(SEXP p_vecSEXP, SEXP mean_bias_vecSEXP) {
@@ -46,6 +130,12 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_nbcf_rcpp_calculate_count_dict", (DL_FUNC) &_nbcf_rcpp_calculate_count_dict, 1},
     {"_nbcf_rcpp_calculate_lnb_values", (DL_FUNC) &_nbcf_rcpp_calculate_lnb_values, 3},
+    {"_nbcf_calculate_pt_grid_lp", (DL_FUNC) &_nbcf_calculate_pt_grid_lp, 5},
+    {"_nbcf_accumulate_colwise", (DL_FUNC) &_nbcf_accumulate_colwise, 1},
+    {"_nbcf_log_sum_exp", (DL_FUNC) &_nbcf_log_sum_exp, 2},
+    {"_nbcf_colwise_log_sum_exp", (DL_FUNC) &_nbcf_colwise_log_sum_exp, 2},
+    {"_nbcf_calculate_lpst_g", (DL_FUNC) &_nbcf_calculate_lpst_g, 7},
+    {"_nbcf_rcpp_calculate_lpst", (DL_FUNC) &_nbcf_rcpp_calculate_lpst, 7},
     {"_nbcf_rcpp_calculate_p_dict", (DL_FUNC) &_nbcf_rcpp_calculate_p_dict, 2},
     {NULL, NULL, 0}
 };

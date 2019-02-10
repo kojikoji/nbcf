@@ -9,6 +9,30 @@ rcpp_calculate_lnb_values <- function(count_vec, p_vec, r) {
     .Call(`_nbcf_rcpp_calculate_lnb_values`, count_vec, p_vec, r)
 }
 
+calculate_pt_grid_lp <- function(count_sp_vec, grid_lnb_mat, count_dict, p_dict, t_grids) {
+    .Call(`_nbcf_calculate_pt_grid_lp`, count_sp_vec, grid_lnb_mat, count_dict, p_dict, t_grids)
+}
+
+accumulate_colwise <- function(mat) {
+    .Call(`_nbcf_accumulate_colwise`, mat)
+}
+
+log_sum_exp <- function(vec, w_vec) {
+    .Call(`_nbcf_log_sum_exp`, vec, w_vec)
+}
+
+colwise_log_sum_exp <- function(mat, w_vec) {
+    .Call(`_nbcf_colwise_log_sum_exp`, mat, w_vec)
+}
+
+calculate_lpst_g <- function(count_sp_vec, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids) {
+    .Call(`_nbcf_calculate_lpst_g`, count_sp_vec, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids)
+}
+
+rcpp_calculate_lpst <- function(count_sp_mat, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids) {
+    .Call(`_nbcf_rcpp_calculate_lpst`, count_sp_mat, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids)
+}
+
 rcpp_calculate_p_dict <- function(p_vec, mean_bias_vec) {
     .Call(`_nbcf_rcpp_calculate_p_dict`, p_vec, mean_bias_vec)
 }
