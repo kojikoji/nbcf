@@ -26,7 +26,7 @@ setClass(
     t.vec="vector",
     mean.bias.vec="vector",
     params="list",
-    lnb.dict.mat="list",
+    lnb.dict="LnbDict",
     lqt="vector",
     lpst="matrix",
     sim.change.point.list = "list",

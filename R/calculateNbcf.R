@@ -25,14 +25,28 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   count.mat <- count.mat[, order(t.vec)]
   lpst <- calculateLpst(lnb.dict, count.mat, t.grids)
   lqt <- calculateLqt(lpst, lambda)
-  sim.change.point <- perfectSimulation(lqt, lpst, lambda)
-  map.change.point <- estimateMap(lqt, lpst, lambda)
-  change.variate <- detectVariate(map.change.point, count.mat, lnb.dict)
-  nbcf <- new("Nbcf", count.mat=count.mat, t.vec=t.vec, mean.bias.vec=mean.bias.vec,
-                  params=list(alpha=alpha, beta=beta, r=r, lambda=lambda,
-                              p.res=p.res, count.res=count.res),
-                  lnb.dict=lnb.dict, lpst=lpst, lqt=lqt,
-                  sim.change.point=sim.change.point, map.change.point=map.change.poin,
-                  change.variate=change.variate)
+  indx.sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
+  ## conver from grid index to t corresponding to end point of each grid
+  sim.change.point.list <- purrr::map(
+                                    indx.sim.change.point.list,
+                                    ~ t.grids[.x + 1])
+  map.change.point <- vector() ## estimateMap(lqt, lpst, lambda)
+  change.variate <- list() ## detectVariate(map.change.point, count.mat, lnb.dict)
+  nbcf <- new("Nbcf",
+              count.mat = count.mat,
+              t.vec = t.vec,
+              mean.bias.vec = mean.bias.vec,
+              params = list(
+                alpha = alpha,
+                beta = beta,
+                r = r,
+                lambda = lambda,
+                p.res = p.res,
+                count.res = count.res),
+              lnb.dict = lnb.dict,
+              lpst = lpst, lqt = lqt,
+              sim.change.point.list = sim.change.point.list,
+              map.change.point = map.change.point,
+              change.variate = change.variate)
   return(nbcf)
 }

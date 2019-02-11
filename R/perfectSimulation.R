@@ -21,7 +21,8 @@ perfectSimulation <- function(lqt, lpst, lambda, sim.iter=100){
         current.ct < t.max - 1,
         sample(seq(current.ct + 1, t.max), 1, prob=transition.prob.list[[as.character(current.ct)]]), ## as.character used because use 0 index
         t.max)
-      ct.vec <- c(ct.vec, current.ct)
+      ## add other than t.max, which means no transition
+      if(current.ct < t.max) ct.vec <- c(ct.vec, current.ct)
     }
     change.points.list[[i]] <- ct.vec
   }
