@@ -25,7 +25,7 @@ You should firstly apply calculateQt and after either perfectSimulation or estim
 
 \item{\code{lqt}}{Numeric vector, log probability of Yt:n given there is change point in t-1}
 
-\item{\code{sim.change.point}}{Numeric vector, change points simulated from perfectSimulation}
+\item{\code{sim.change.point.list}}{List, each elements contains change points simulated from perfectSimulation}
 
 \item{\code{map.change.point}}{Numeric.vector, change points simulated from estimateMap}
 
