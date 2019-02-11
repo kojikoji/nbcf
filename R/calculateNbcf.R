@@ -14,6 +14,8 @@
 ##' @return Nbcf, nbcf Instance of class \code{\link{Nbcf}}
 ##' @seealso [Nbcf]
 ##' @author Yasuhiro Kojima
+##' 
+##' @export
 
 calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
