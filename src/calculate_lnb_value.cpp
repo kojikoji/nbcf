@@ -22,8 +22,8 @@ Eigen::MatrixXd rcpp_calculate_lnb_values(Eigen::VectorXi count_vec, Eigen::Vect
       double k = count_vec(i);
       double p = p_vec(j);
       // When p ==  0 or 1, avoid emergence of infinity
-      double logp = p == 0 ? -1.0e100 : log(p);
-      double log1mp = (1 - p) == 0 ? -1.0e100 : log(1 - p);
+      double logp = p == 0 ? -1.0e30 : log(p);
+      double log1mp = (1 - p) == 0 ? -1.0e30 : log(1 - p);
       lnb_values(j, i) = lgamma(r + k) - lgamma(r) - lgamma(k+1) + k * logp + r * log1mp;
     }
   }
