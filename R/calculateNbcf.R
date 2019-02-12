@@ -25,6 +25,7 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
   ## count.mat is ordered based on t.vec 
   count.mat <- count.mat[, order(t.vec)]
+  t.vec <- t.vec[order(t.vec)]
   lpst <- calculateLpst(lnb.dict, count.mat, t.grids)
   lqt <- calculateLqt(lpst, lambda)
   indx.sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
