@@ -66,16 +66,22 @@ Eigen::MatrixXd calculate_lpst_g(const Eigen::VectorXd &count_sp_vec,
 				 const Eigen::MatrixXi &p_dict,
 				 const Eigen::VectorXd &p_width_vec,
 				 const Eigen::VectorXi &t_grids){
+  Eigen::MatrixXd lpst = Eigen::MatrixXd::Zero(t_grids.size() - 1,  t_grids.size() - 1);
+  // likelihood of each grid of p and t
   Eigen::MatrixXd pt_grid_lp = calculate_pt_grid_lp(count_sp_vec, grid_lnb_mat, count_dict, p_dict, t_grids);
-  // Accumulation make pt_grid_lp summed log probability from 0 to each column index
-  Eigen::MatrixXd p_grid_lpsn = accumulate_colwise(pt_grid_lp);
-  Eigen::MatrixXd lp_mat = Eigen::MatrixXd::Zero(t_grids.size() - 1,  t_grids.size() - 1);
-  for(int s = 0; s < t_grids.size() - 1; s++){
-    Eigen::MatrixXd pr_p_grid_lpsn = p_grid_lpsn.colwise() + lprior_vec; 
-    lp_mat.row(s) = colwise_log_sum_exp(pr_p_grid_lpsn, p_width_vec);
-    p_grid_lpsn = p_grid_lpsn.colwise() - pt_grid_lp.col(s);
+  // This stores likelihood interval between s and t (each column) for each p grid
+  // s is changed for each loop from end to begin
+  Eigen::MatrixXd p_grid_lpst = Eigen::MatrixXd::Zero(pt_grid_lp.rows(), pt_grid_lp.cols());
+  for(int s = t_grids.size() - 2; s >= 0; s--){
+    Eigen::MatrixXd pr_p_grid_lpst = p_grid_lpst.colwise() + lprior_vec; 
+    for(int t = s; t < t_grids.size() - 1; t++){
+      // add new interval (s) for previous p_grid_lpst
+      p_grid_lpst.col(t) += pt_grid_lp.col(s);
+      // prior are added and log sum exp
+      lpst(s, t) = log_sum_exp(lprior_vec + p_grid_lpst.col(t), p_width_vec);
+    }
   }
-  return(lp_mat);
+  return(lpst);
 }
 
 // [[Rcpp::depends(RcppEigen)]]
