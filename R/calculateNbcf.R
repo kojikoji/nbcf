@@ -31,7 +31,7 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   ## conver from grid index to t corresponding to end point of each grid
   sim.change.point.list <- purrr::map(
                                     indx.sim.change.point.list,
-                                    ~ t.grids[.x + 1])
+                                    ~ t.vec[t.grids[.x + 1]])
   map.change.point <- vector() ## estimateMap(lqt, lpst, lambda)
   change.variate <- list() ## detectVariate(map.change.point, count.mat, lnb.dict)
   nbcf <- new("Nbcf",

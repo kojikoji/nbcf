@@ -21,7 +21,4 @@ test_that("test perfectSimulation",{
           expect_equal(
             length(change.points.list),
             5)
-          expect_gte(
-            length(change.points.list[[2]]),
-            1)
 })
