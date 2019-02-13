@@ -114,6 +114,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// get_approximate_index
+Eigen::VectorXi get_approximate_index(Eigen::VectorXd original_vec, Eigen::VectorXd approximate_vec);
+RcppExport SEXP _nbcf_get_approximate_index(SEXP original_vecSEXP, SEXP approximate_vecSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type original_vec(original_vecSEXP);
+    Rcpp::traits::input_parameter< Eigen::VectorXd >::type approximate_vec(approximate_vecSEXP);
+    rcpp_result_gen = Rcpp::wrap(get_approximate_index(original_vec, approximate_vec));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rcpp_calculate_p_dict
 Eigen::MatrixXi rcpp_calculate_p_dict(const Eigen::Map<Eigen::VectorXd> p_vec, const Eigen::Map<Eigen::VectorXd> mean_bias_vec);
 RcppExport SEXP _nbcf_rcpp_calculate_p_dict(SEXP p_vecSEXP, SEXP mean_bias_vecSEXP) {
@@ -136,6 +148,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nbcf_colwise_log_sum_exp", (DL_FUNC) &_nbcf_colwise_log_sum_exp, 2},
     {"_nbcf_calculate_lpst_g", (DL_FUNC) &_nbcf_calculate_lpst_g, 7},
     {"_nbcf_rcpp_calculate_lpst", (DL_FUNC) &_nbcf_rcpp_calculate_lpst, 7},
+    {"_nbcf_get_approximate_index", (DL_FUNC) &_nbcf_get_approximate_index, 2},
     {"_nbcf_rcpp_calculate_p_dict", (DL_FUNC) &_nbcf_rcpp_calculate_p_dict, 2},
     {NULL, NULL, 0}
 };

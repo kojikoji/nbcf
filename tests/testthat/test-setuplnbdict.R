@@ -43,8 +43,34 @@ test_that("p.dict from calculatePdict is correct", {
     matrix(c(0, 1, 2,
              0, 1, 2),
            ncol=2))
+  p.dict <- rcpp_calculate_p_dict(seq(0, 1000)/1000, c(0.5, 2))
+  expect_equal(
+    p.dict[,1][1],
+    0)
+  expect_equal(
+    p.dict[,1][1001],
+    1000)
+  expect_equal(
+    p.dict[,2][1],
+    0)
+  expect_equal(
+    p.dict[,2][1001],
+    1000)
 
 })
+
+
+test_that("get_approximate_index is correct",{
+  p.vec <- seq(0, 1000)/1000
+  mod.p.vec <- calculatePvec(1001)
+  approx.idx <- get_approximate_index(mod.p.vec, p.vec)
+  expect_equal(
+    approx.idx[300] + 1,
+    which.min(abs(p.vec - mod.p.vec[300]))
+  )
+})
+          
+
 
 test_that("lnb probability from calculateLnbValues is correct", {
   lnb.values <- calculateLnbValues(c(10, 20), c(0.1, 0.5), 30)

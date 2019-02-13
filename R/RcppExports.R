@@ -33,6 +33,10 @@ rcpp_calculate_lpst <- function(count_sp_mat, grid_lnb_mat, lprior_vec, count_di
     .Call(`_nbcf_rcpp_calculate_lpst`, count_sp_mat, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids)
 }
 
+get_approximate_index <- function(original_vec, approximate_vec) {
+    .Call(`_nbcf_get_approximate_index`, original_vec, approximate_vec)
+}
+
 rcpp_calculate_p_dict <- function(p_vec, mean_bias_vec) {
     .Call(`_nbcf_rcpp_calculate_p_dict`, p_vec, mean_bias_vec)
 }

@@ -10,8 +10,10 @@ VectorXd fix_p_vec(VectorXd p_vec, double mean_bias){
 
 // Get approximated index of each of original_vec in approximate_vec.
 // Note: This function assume both vectors sorted ascending
-VectorXi get_approximate_index(VectorXd original_vec, VectorXd approximate_vec){
-  VectorXi approximate_index(original_vec.size());
+// [[Rcpp::export]]
+
+Eigen::VectorXi get_approximate_index(Eigen::VectorXd original_vec, Eigen::VectorXd approximate_vec){
+  Eigen::VectorXi approximate_index(original_vec.size());
   // initialize grid bound
   // We select two grids between which each original values are
   double grid_lower = approximate_vec(0);
@@ -26,8 +28,10 @@ VectorXi get_approximate_index(VectorXd original_vec, VectorXd approximate_vec){
     }
     if(original_vec(i) > grid_upper){
       // Shift grid
-      grid_lower = grid_upper;
-      grid_upper = approximate_vec(++grid_upper_index);
+      while(original_vec(i) > grid_upper && grid_upper_index < approximate_vec.size() - 1){
+	grid_lower = grid_upper;
+	grid_upper = approximate_vec(++grid_upper_index);
+      }
     }
     // Chose lower or upper grid
     if(original_vec(i) - grid_lower < grid_upper - original_vec(i)){

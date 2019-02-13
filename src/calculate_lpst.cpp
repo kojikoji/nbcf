@@ -20,7 +20,7 @@ Eigen::MatrixXd calculate_pt_grid_lp(const Eigen::VectorXd &count_sp_vec,
     for(int p_id = 0; p_id < p_dict.rows(); p_id++){
       // add the lnb value to current grid
       int approx_count_id = count_dict(count_sp_vec(oid));
-      pt_grid_lp(p_id, upper_t_grid_id - 1) += grid_lnb_mat(p_id, approx_count_id);
+      pt_grid_lp(p_id, upper_t_grid_id - 1) += grid_lnb_mat(p_dict(p_id, oid), approx_count_id);
     }
   }
   return(pt_grid_lp);

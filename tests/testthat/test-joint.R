@@ -76,3 +76,38 @@ test_that("perfectSimulaton correctly mine two wchange points", {
     median.change.point.num,
     2)
 })
+
+
+test_that("perfectSimulaton does not mine bias change", {
+  alpha=2.0
+  beta=2.0
+  r=30
+  lambda=1.0e-2
+  p.res=1000
+  count.res=500
+  t.res=100
+  tnum <- 100
+  t.vec <- seq(tnum)
+  true.change.point <- 40
+  true.bias.point <- 60
+  before.change.vec <- rnbinom(6*(true.change.point), 30, 0.995)
+  p <- 0.05
+  after.change.vec <- rnbinom(6*(true.bias.point - true.change.point), 30, 1 - p)
+  mean.bias <- 3
+  biased.p <- mean.bias*p/(1+(mean.bias-1)*p)
+  after.bias.vec <- rnbinom(6*(tnum - true.bias.point), 30, 1 - biased.p)
+  count.mat <- Matrix(c(before.change.vec, after.change.vec, after.bias.vec), nrow=6, sparse=T)
+  mean.bias.vec <- c(rep(1, true.bias.point),
+                     rep(mean.bias, tnum - true.bias.point))
+  mean.bias.vec <- mean.bias.vec/mean(mean.bias.vec)
+  ## estimation
+  nbcf <- calculateNbcf(count.mat, t.vec, mean.bias.vec,
+                          alpha, beta, r, lambda,
+                          p.res, count.res, t.res)
+  ## check change points num
+  median.change.point.num <- median(unlist(purrr::map(nbcf@sim.change.point.list,
+                                                      ~ length(.x))))
+  expect_equal(
+    median.change.point.num,
+    1)
+})
