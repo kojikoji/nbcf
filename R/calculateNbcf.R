@@ -11,6 +11,7 @@
 ##' @param p.res Integer, Approximation resolution of parameter p
 ##' @param count.res Integer, Approximation resolution of count.
 ##' @param t.res Integer, Approximation resolution of t.
+##' @param min.lhr Numeric, Threshold for probability rate between merged and divided models
 ##' @return Nbcf, nbcf Instance of class \code{\link{Nbcf}}
 ##' @seealso [Nbcf]
 ##' @author Yasuhiro Kojima
@@ -19,7 +20,7 @@
 
 calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
-                          p.res=1000, count.res=1000, t.res=100){
+                          p.res=1000, count.res=1000, t.res=100, min.lhr=10){
   ## count.mat and mean.bias.vec  are ordered based on t.vec 
   count.mat <- count.mat[, order(t.vec)]
   mean.bias.vec <- mean.bias.vec[order(t.vec)]
@@ -37,11 +38,11 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                ~ max(calculateLhrDivideTwo(.x))
                )
   )
-  ## use variates whose lhr exceeds 0 at any points
-  ## this means those variates are expected to divided into two models at some location
-  if(sum(lhr.max.list > 0) > 0){
-    lpst <- purrr::reduce(lpst.list[lhr.max.list > 0], ~ .x + .y)
-    used.vars <- rownames(count.mat)[lhr.max.list > 0]
+  ## use variates whose lhr exceeds min.lhr at any points
+  ## this means those variates are relatively more expected to divided into two models at some location
+  if(sum(lhr.max.list > min.lhr) > 0){
+    lpst <- purrr::reduce(lpst.list[lhr.max.list > min.lhr], ~ .x + .y)
+    used.vars <- rownames(count.mat)[lhr.max.list > min.lhr]
   }else{
     print("No variates are expected to change localy")
     lpst <- purrr::reduce(lpst.list, ~ .x + .y)
