@@ -33,6 +33,8 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   ## t.grids will seprate observation into t.res bins
   t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
   lpst.list <- calculateLpstList(lnb.dict, count.mat, t.grids)
+  ## add variate names for lpst.list
+  names(lpst.list) <- rownames(count.mat)
   lhr.max.list <- unlist(
     purrr::map(lpst.list,
                ~ max(calculateLhrDivideTwo(.x))
