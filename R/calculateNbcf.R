@@ -24,11 +24,29 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   count.mat <- count.mat[, order(t.vec)]
   mean.bias.vec <- mean.bias.vec[order(t.vec)]
   t.vec <- t.vec[order(t.vec)]
+  ## rows of count.mat will be named as seq(nrow(count.mat))
+  if(length(rownames(count.mat)) == 0){
+    rownames(count.mat) <- seq(nrow(count.mat))
+  }
   lnb.dict <- setupLnbDict(max(count.mat), mean.bias.vec, r, alpha, beta, count.res, p.res)
   ## t.grids will seprate observation into t.res bins
   t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
   lpst.list <- calculateLpstList(lnb.dict, count.mat, t.grids)
-  lpst <- purrr::reduce(lpst.list, ~ .x + .y)
+  lhr.max.list <- unlist(
+    purrr::map(lpst.list,
+               ~ max(calculateLhrDivideTwo(.x))
+               )
+  )
+  ## use variates whose lhr exceeds 0 at any points
+  ## this means those variates are expected to divided into two models at some location
+  if(sum(lhr.max.list > 0) > 0){
+    lpst <- purrr::reduce(lpst.list[lhr.max.list > 0], ~ .x + .y)
+    used.vars <- rownames(count.mat)[lhr.max.list > 0]
+  }else{
+    print("No variates are expected to change localy")
+    lpst <- purrr::reduce(lpst.list, ~ .x + .y)
+    used.vars <- rownames(count.mat)
+  }
   lqt <- calculateLqt(lpst, lambda)
   indx.sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
   ## conver from grid index to t corresponding to end point of each grid
@@ -51,6 +69,7 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
               lnb.dict = lnb.dict,
               lpst = lpst,
               lpst.list = lpst.list,
+              used.vars = used.vars,
               lqt = lqt,
               sim.change.point.list = sim.change.point.list,
               map.change.point = map.change.point,
