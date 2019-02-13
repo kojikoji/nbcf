@@ -50,6 +50,17 @@ test_that("calculate_lpst_g work well", {
               c(10, 10))
 })
 
+test_that("calculate_lpst_list work well", {
+  count.mat <- Matrix(rnbinom(6*800, 30, 0.995), nrow=6)
+  lnb.dict <- setupLnbDict(max(count.mat), mean.bias.vec=runif(800, 0.8, 1.2),
+                           r=30, alpha=2, beta=2, count.res=500, p.res=300)
+  t.grids <- seq(0, 10)*80
+  lpst_list <- rcpp_calculate_lpst_list(count.mat, lnb.dict@values, lnb.dict@lprior.values,
+                 lnb.dict@count.dict, lnb.dict@p.dict, lnb.dict@p.width.vec, t.grids)
+  expect_equal(length(lpst_list),
+               6)
+})
+
 test_that("calculateLpst work well", {
   count.mat <- Matrix(rnbinom(6*800, 30, 0.995), nrow=6)
   lnb.dict <- setupLnbDict(max(count.mat), mean.bias.vec=runif(800, 0.8, 1.2),
@@ -61,6 +72,7 @@ test_that("calculateLpst work well", {
   expect_equal(dim(lpst),
               c(10, 10))
 })
+
 
 test_that("calculateQt work well", {
   lpst <- matrix(runif(10*10, -1, -0.01), nrow=10)

@@ -114,6 +114,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rcpp_calculate_lpst_list
+Rcpp::List rcpp_calculate_lpst_list(const Eigen::SparseMatrix<double>& count_sp_mat, const Eigen::MatrixXd& grid_lnb_mat, const Eigen::VectorXd& lprior_vec, const Eigen::VectorXi& count_dict, const Eigen::MatrixXi& p_dict, const Eigen::VectorXd& p_width_vec, const Eigen::VectorXi& t_grids);
+RcppExport SEXP _nbcf_rcpp_calculate_lpst_list(SEXP count_sp_matSEXP, SEXP grid_lnb_matSEXP, SEXP lprior_vecSEXP, SEXP count_dictSEXP, SEXP p_dictSEXP, SEXP p_width_vecSEXP, SEXP t_gridsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Eigen::SparseMatrix<double>& >::type count_sp_mat(count_sp_matSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type grid_lnb_mat(grid_lnb_matSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type lprior_vec(lprior_vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type count_dict(count_dictSEXP);
+    Rcpp::traits::input_parameter< const Eigen::MatrixXi& >::type p_dict(p_dictSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type p_width_vec(p_width_vecSEXP);
+    Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type t_grids(t_gridsSEXP);
+    rcpp_result_gen = Rcpp::wrap(rcpp_calculate_lpst_list(count_sp_mat, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids));
+    return rcpp_result_gen;
+END_RCPP
+}
 // get_approximate_index
 Eigen::VectorXi get_approximate_index(Eigen::VectorXd original_vec, Eigen::VectorXd approximate_vec);
 RcppExport SEXP _nbcf_get_approximate_index(SEXP original_vecSEXP, SEXP approximate_vecSEXP) {
@@ -148,6 +165,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nbcf_colwise_log_sum_exp", (DL_FUNC) &_nbcf_colwise_log_sum_exp, 2},
     {"_nbcf_calculate_lpst_g", (DL_FUNC) &_nbcf_calculate_lpst_g, 7},
     {"_nbcf_rcpp_calculate_lpst", (DL_FUNC) &_nbcf_rcpp_calculate_lpst, 7},
+    {"_nbcf_rcpp_calculate_lpst_list", (DL_FUNC) &_nbcf_rcpp_calculate_lpst_list, 7},
     {"_nbcf_get_approximate_index", (DL_FUNC) &_nbcf_get_approximate_index, 2},
     {"_nbcf_rcpp_calculate_p_dict", (DL_FUNC) &_nbcf_rcpp_calculate_p_dict, 2},
     {NULL, NULL, 0}

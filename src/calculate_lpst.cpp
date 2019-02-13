@@ -100,3 +100,20 @@ Eigen::MatrixXd rcpp_calculate_lpst(const Eigen::SparseMatrix<double> &count_sp_
   }
   return(lpst);
 }
+
+// calculate lpst for all variate and return list
+// [[Rcpp::export]]
+Rcpp::List rcpp_calculate_lpst_list(const Eigen::SparseMatrix<double> &count_sp_mat,
+				    const Eigen::MatrixXd &grid_lnb_mat,
+				    const Eigen::VectorXd &lprior_vec,
+				    const Eigen::VectorXi &count_dict,
+				    const Eigen::MatrixXi &p_dict,
+				    const Eigen::VectorXd &p_width_vec,
+				    const Eigen::VectorXi &t_grids){
+  Rcpp::List lpst_list = Rcpp::List::create();
+  Eigen::MatrixXd lpst = Eigen::MatrixXd::Zero(t_grids.size() - 1,  t_grids.size() - 1);
+  for(int g = 0; g < count_sp_mat.rows(); g++){
+    lpst_list.push_back(calculate_lpst_g(count_sp_mat.row(g), grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids));
+  }
+  return(lpst_list);
+}

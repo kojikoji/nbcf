@@ -27,7 +27,8 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   lnb.dict <- setupLnbDict(max(count.mat), mean.bias.vec, r, alpha, beta, count.res, p.res)
   ## t.grids will seprate observation into t.res bins
   t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
-  lpst <- calculateLpst(lnb.dict, count.mat, t.grids)
+  lpst.list <- calculateLpstList(lnb.dict, count.mat, t.grids)
+  lpst <- purrr::reduce(lpst.list, ~ .x + .y)
   lqt <- calculateLqt(lpst, lambda)
   indx.sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
   ## conver from grid index to t corresponding to end point of each grid
@@ -48,7 +49,9 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                 p.res = p.res,
                 count.res = count.res),
               lnb.dict = lnb.dict,
-              lpst = lpst, lqt = lqt,
+              lpst = lpst,
+              lpst.list = lpst.list,
+              lqt = lqt,
               sim.change.point.list = sim.change.point.list,
               map.change.point = map.change.point,
               change.variate = change.variate)

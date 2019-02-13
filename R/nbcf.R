@@ -12,6 +12,7 @@
 ##' @slot params List, named list of parameters, whose mebers must be "lambda", "r", "alpha" and "beta".
 ##' @slot lnb.dict LnbDict, Storage for precomputated log negative binomial probability. This is a instance of  \code{\link{LnbDict}}.
 ##' @slot lpst Numeric matrix, log probability of Ys:t
+##' @slot lpst.list Numeric matrix, list of \code{lpst} for each variate
 ##' @slot lqt Numeric vector, log probability of Yt:n given there is change point in t-1
 ##' @slot sim.change.point.list List, each elements contains change points simulated from perfectSimulation
 ##' @slot map.change.point Numeric.vector, change points simulated from estimateMap
@@ -29,6 +30,7 @@ setClass(
     lnb.dict="LnbDict",
     lqt="vector",
     lpst="matrix",
+    lpst.list="list",
     sim.change.point.list = "list",
     map.change.point = "vector",
     change.variate = "list"
