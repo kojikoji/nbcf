@@ -7,14 +7,14 @@
 calculateLpstList(lnb.dict, count.mat, t.grids)
 }
 \arguments{
-\item{lnb.dict}{}
+\item{lnb.dict}{see \code{\link{lnb.dict}}}
 
-\item{count.mat}{}
+\item{count.mat}{Integer matrix, count data. each row and column represent variate and observation}
 
-\item{t.grids}{}
+\item{t.grids}{Numeric vector, grid index of t.vec}
 }
 \value{
-pst
+lpst Numeric matrix, log probability for each time interval
 }
 \description{
 Calculate the probability of count.mat[:, s:t] variate-wise
@@ -23,5 +23,5 @@ Calculate the probability of count.mat[:, s:t] variate-wise
 Based on probability values of grid points in \code{lnb.dict}, this calculate the probability values of specific time intervals of  \code{count.mat}. This returns the list for each variate
 }
 \author{
-小嶋泰弘
+Yasuhiro Kojima
 }
