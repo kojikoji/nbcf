@@ -8,36 +8,40 @@
 ##' @return change.var.df tibble, contains variate names, corresponding change point, entropy and change number among corresponding intervals
 ##' @author Yasuhiro Kojima
 findChangeVariate <- function(lpst.list, used.vars, ct.vec, lambda = 0.5){
-  ## add ct vec to begin and end of time
+  if(length(ct.vec) > 0){
+    ## add ct vec to begin and end of time
     extended.ct.vec <- c(0, ct.vec, ncol(lpst.list[[1]]))
     change.var.df <- tibble()
     for(var in used.vars){
-        for(ct.idx in seq(length(ct.vec))){
-            ct  <-  ct.vec[ct.idx]
-            previous.ct  <-  extended.ct.vec[ct.idx - 1 + 1]
-            following.ct  <-  extended.ct.vec[ct.idx + 1 + 1]
-            lpst  <-  lpst.list[[var]][(previous.ct + 1):following.ct,
-                                    (previous.ct + 1):following.ct]
-            lqt  <-  calculateLqt(lpst, lambda)
-            sim.ct.list  <-  perfectSimulation(lqt, lpst, lambda)
-            median.change.num  <-  median(
-                unlist(purrr::map(
-                                  sim.ct.list,
-                                  ~ length(.x)
-                              )
-                       )
-            )
-            entropy <- calculateEntropyTwoCt(lqt, lpst, lambda)
-            change.var.df <- rbind(change.var.df,
-                                   tibble(ct = ct,
-                                          var = var,
-                                          median.change.num = median.change.num,
-                                          entropy = entropy
-                                        )
-                                   )
-        }
+      for(ct.idx in seq(length(ct.vec))){
+        ct  <-  ct.vec[ct.idx]
+        previous.ct  <-  extended.ct.vec[ct.idx - 1 + 1]
+        following.ct  <-  extended.ct.vec[ct.idx + 1 + 1]
+        lpst  <-  lpst.list[[var]][(previous.ct + 1):following.ct,
+          (previous.ct + 1):following.ct]
+        lqt  <-  calculateLqt(lpst, lambda)
+        sim.ct.list  <-  perfectSimulation(lqt, lpst, lambda)
+        median.change.num  <-  median(
+          unlist(purrr::map(
+                          sim.ct.list,
+                          ~ length(.x)
+                        )
+                 )
+        )
+        entropy <- calculateEntropyTwoCt(lqt, lpst, lambda)
+        change.var.df <- rbind(change.var.df,
+                               tibble(ct = ct,
+                                      var = var,
+                                      median.change.num = median.change.num,
+                                      entropy = entropy
+                                      )
+                               )
+      }
     }
-    return(change.var.df)
+  }else{
+    change.var.df <- tibble()
+  }
+  return(change.var.df)
 }
 
 
