@@ -51,13 +51,15 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
     used.vars <- rownames(count.mat)
   }
   lqt <- calculateLqt(lpst, lambda)
-  indx.sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
-  ## conver from grid index to t corresponding to end point of each grid
-  sim.change.point.list <- purrr::map(
-                                    indx.sim.change.point.list,
-                                    ~ t.vec[t.grids[.x + 1]])
+  sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
+  sig.ct <- decideSignificantChange(sim.change.point.list)
   map.change.point <- vector() ## estimateMap(lqt, lpst, lambda)
-  change.variate <- list() ## detectVariate(map.change.point, count.mat, lnb.dict)
+  change.variate.df <- findChangeVariate(lpst.list, used.vars, sig.ct, lambda = lambda) %>% ## map.ct will be used
+    dplyr::filter(median.change.num == 1)
+  ## conver from grid index to t corresponding to end point of each grid
+  outer.sim.change.point.list <- purrr::map(
+                                    sim.change.point.list,
+                                    ~ t.vec[t.grids[.x + 1]])
   nbcf <- new("Nbcf",
               count.mat = count.mat,
               t.vec = t.vec,
@@ -74,8 +76,8 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
               lpst.list = lpst.list,
               used.vars = used.vars,
               lqt = lqt,
-              sim.change.point.list = sim.change.point.list,
+              sim.change.point.list = outer.sim.change.point.list,
               map.change.point = map.change.point,
-              change.variate = change.variate)
+              change.variate.df = change.variate.df)
   return(nbcf)
 }

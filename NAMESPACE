@@ -2,5 +2,6 @@
 
 export(calculateNbcf)
 import(Matrix)
+import(tibble)
 importFrom(Rcpp,sourceCpp)
 useDynLib(nbcf, .registration=TRUE)

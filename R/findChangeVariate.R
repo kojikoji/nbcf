@@ -9,39 +9,35 @@
 ##' @author Yasuhiro Kojima
 findChangeVariate <- function(lpst.list, used.vars, ct.vec, lambda = 0.5){
   ## add ct vec to begin and end of time
-  extended.ct.vec <- c(0, ct.vec, ncol(lpst.list[[1]]))
-  df <- crossing(var = used.vars, ct.idx = seq(length(ct.vec))) %>%
-      dplyr::mutate(
-             ct = purrr::map(ct.idx, ~ ct.vec[.x]),
-             lpst = purrr::map2(
-                             var, ct.idx,
-                             ~ lpst.list[[.x]][(extended.ct.vec[.y - 1 + 1] + 1):extended.ct.vec[.y + 1 + 1],
-                                               (extended.ct.vec[.y - 1 + 1] + 1):extended.ct.vec[.y + 1 + 1]]
-                             ),
-             lqt = purrr::map(
-                            lpst,
-                            ~ calculateLqt(.x, lambda)
-                          ),
-             sim.ct.list = purrr::map2(
-                                    lqt, lpst,
-                                    ~ perfectSimulation(.x, .y, lambda)
-                                  ),
-             median.change.num = median(
-               unlist(
-                 purrr::map(
-                          sim.ct.list,
-                          ~ length(.x)
-                        )
-               )
-             )
-           ) %>%
-      dplyr::mutate(
-                 entropy = purrr::map2(
-                                      lqt, lpst,
-                                      ~ calculateEntropyTwoCt(.x, .y, lambda)
-                                  )
-             ) %>%
-      dplyr::select(var, ct, entropy, median.change.num) %>% unnest()
+    extended.ct.vec <- c(0, ct.vec, ncol(lpst.list[[1]]))
+    change.var.df <- tibble()
+    for(var in used.vars){
+        for(ct.idx in seq(length(ct.vec))){
+            ct  <-  ct.vec[ct.idx]
+            previous.ct  <-  extended.ct.vec[ct.idx - 1 + 1]
+            following.ct  <-  extended.ct.vec[ct.idx + 1 + 1]
+            lpst  <-  lpst.list[[var]][(previous.ct + 1):following.ct,
+                                    (previous.ct + 1):following.ct]
+            lqt  <-  calculateLqt(lpst, lambda)
+            sim.ct.list  <-  perfectSimulation(lqt, lpst, lambda)
+            median.change.num  <-  median(
+                unlist(purrr::map(
+                                  sim.ct.list,
+                                  ~ length(.x)
+                              )
+                       )
+            )
+            entropy <- calculateEntropyTwoCt(lqt, lpst, lambda)
+            change.var.df <- rbind(change.var.df,
+                                   tibble(ct = ct,
+                                          var = var,
+                                          median.change.num = median.change.num,
+                                          entropy = entropy
+                                        )
+                                   )
+        }
+    }
+    return(change.var.df)
 }
 
 
@@ -56,6 +52,9 @@ findChangeVariate <- function(lpst.list, used.vars, ct.vec, lambda = 0.5){
 ##' @author Yasuhiro Kojima
 calculateEntropyTwoCt <- function(lqt, lpst, lambda){
     entropy <- 0
+    regulalize <- function(vec) vec/sum(vec)
+    regExp <- function(vec) regulalize(exp(vec - max(vec)))
+    lprob.vec <- vector()
     for(ct1 in seq(length(lqt) - 1)){
         for(ct2 in seq(ct1 + 1, length(lqt))){
             if(ct2 < length(lqt)){
@@ -65,8 +64,10 @@ calculateEntropyTwoCt <- function(lqt, lpst, lambda){
                 lprob <- lpst[1, ct1] + lpst[ct1 + 1, ct2] +
                     log(lambda) + (ct2 - 1) * log(1 - lambda)
             }
-            entropy <- exp(lprob) * lprob
+            lprob.vec <- c(lprob.vec, lprob)
         }
     }
+    prob.vec <- regExp(lprob.vec)
+    entropy <- sum(- prob.vec * log(prob.vec + 1.0e-200))
     return(entropy)
 }

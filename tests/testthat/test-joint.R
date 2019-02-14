@@ -111,3 +111,37 @@ test_that("perfectSimulaton does not mine bias change", {
     median.change.point.num,
     1)
 })
+
+test_that("findChangeVariate correctly mine changed variates for each change point", {
+  alpha=2.0
+  beta=2.0
+  r=30
+  lambda=1.0e-2
+  p.res=1000
+  count.res=500
+  t.res=100
+  tnum <- 1000
+  t.vec <- seq(tnum)
+  c1.true.change.point <- 400
+  c1.before.change.vec <- rnbinom(6*(c1.true.change.point), 30, 0.995)
+  c1.after.change.vec <- rnbinom(6*(tnum - c1.true.change.point), 30, 0.95)
+  c1.count.mat <- Matrix(c(c1.before.change.vec, c1.after.change.vec), nrow=6, sparse=T)
+  c2.true.change.point <- 700
+  c2.before.change.vec <- rnbinom(6*(c2.true.change.point), 30, 0.995)
+  c2.after.change.vec <- rnbinom(6*(tnum - c2.true.change.point), 30, 0.95)
+  c2.count.mat <- Matrix(c(c2.before.change.vec, c2.after.change.vec), nrow=6, sparse=T)
+  count.mat <- rbind(c1.count.mat, c2.count.mat)
+  rownames(count.mat) <- as.character(seq(nrow(count.mat)))
+  mean.bias.vec <- rep(1, length(t.vec))
+  ## estimation
+  nbcf <- calculateNbcf(count.mat, t.vec, mean.bias.vec,
+                          alpha, beta, r, lambda,
+                        p.res, count.res, t.res)
+  change1.df <- nbcf@change.variate.df %>%
+    dplyr::filter(ct - 400 == min(ct - 400))
+  expect_equal(
+    change1.df$var,
+    as.character(seq(6))
+  )
+    
+})

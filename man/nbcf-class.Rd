@@ -33,6 +33,6 @@ You should firstly apply calculateQt and after either perfectSimulation or estim
 
 \item{\code{map.change.point}}{Numeric.vector, change points simulated from estimateMap}
 
-\item{\code{change.variate}}{Character vector, named list of changed variates for each map.change.points}
+\item{\code{change.variate.df}}{tbl, data frame of changed variates. There are columns for change points, variate and etropy of change points. Entropy is expected to be lower for moredistinct change points.}
 }}
 

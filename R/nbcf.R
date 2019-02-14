@@ -17,9 +17,10 @@
 ##' @slot lqt Numeric vector, log probability of Yt:n given there is change point in t-1
 ##' @slot sim.change.point.list List, each elements contains change points simulated from perfectSimulation
 ##' @slot map.change.point Numeric.vector, change points simulated from estimateMap
-##' @slot change.variate Character vector, named list of changed variates for each map.change.points
+##' @slot change.variate.df tbl, data frame of changed variates. There are columns for change points, variate and etropy of change points. Entropy is expected to be lower for moredistinct change points.
 ##'
 ##' @import Matrix
+##' @import tibble
 
 setClass(
   "Nbcf",
@@ -35,6 +36,6 @@ setClass(
     used.vars="vector",
     sim.change.point.list = "list",
     map.change.point = "vector",
-    change.variate = "list"
+    change.variate.df = "tbl"
   )
 )

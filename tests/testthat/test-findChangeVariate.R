@@ -5,7 +5,7 @@ test_that("calculateEntropyTwoCt works without error",{
           lpst <- matrix(runif(10*10, -10, -1), nrow=10)
           lambda <- 0.5
           entropy <- calculateEntropyTwoCt(lqt, lpst, lambda)
-          expect_lte(
+          expect_gte(
               entropy,
               0
           )

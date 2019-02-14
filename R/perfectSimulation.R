@@ -2,7 +2,7 @@
 ##'
 ##' This function samples change points using perfectsimulation, which is a machine learning techunique.
 ##' @title perfectSimulation
-##' @param lqt Numeric vector, Each value represents Yt:n probability 
+##' @param lqt Numeric vector, Each value represents Yt:n probability
 ##' @param lpst Numeric matrix, Log probability for each intervals
 ##' @param lambda Numeric vector, Each value represents Yt:n probability
 ##' @param sim.iter Integer, Iteration of simulation
@@ -33,7 +33,7 @@ perfectSimulation <- function(lqt, lpst, lambda, sim.iter=100){
 ##'
 ##' This calculate the probability of next change points when we assume current change points are on each time points.
 ##' @title calculateCtTransitionProb
-##' @param lqt Numeric vector, Each value represents Yt:n probability 
+##' @param lqt Numeric vector, Each value represents Yt:n probability
 ##' @param lpst Numeric matrix, Log probability for each intervals
 ##' @param lambda Numeric vector, Each value represents Yt:n probability
 ##' @return transition.prob.list List, each element represents vector of probability of next change point. index represents previous change points
@@ -60,4 +60,26 @@ calculateCtTransitionProb <- function(lqt, lpst, lambda){
     transition.prob.list[[as.character(pre.ct)]] <- prob.vec
   }
   return(transition.prob.list)
+}
+
+
+##' Detect change points which is repeatedly appears in perfectSimulation
+##'
+##' This is instant version of detect ct
+##' @title decideSignificantChange
+##' @param sim.change.point.list List, list of simulated change points
+##' @param sig.ct.thresh Numeric, the proportion which detected point change appearance exceeds
+##' @return sig.ct
+##' @author Yasuhiro Kojima
+decideSignificantChange <- function(sim.change.point.list, sig.ct.thresh = 0.9){
+  sim.num <- length(sim.change.point.list)
+  all.sim.ct <- unlist(
+    purrr::map(
+             sim.change.point.list,
+             ~ .x
+           )
+  )
+  unique(all.sim.ct)[
+    unlist(map(unique(all.sim.ct), ~ sum(all.sim.ct == .x))) > sim.num * sig.ct.thresh
+  ]
 }
