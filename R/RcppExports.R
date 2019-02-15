@@ -25,8 +25,8 @@ colwise_log_sum_exp <- function(mat, w_vec) {
     .Call(`_nbcf_colwise_log_sum_exp`, mat, w_vec)
 }
 
-calculate_lpst_g <- function(count_sp_vec, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids) {
-    .Call(`_nbcf_calculate_lpst_g`, count_sp_vec, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids)
+rcpp_calculate_lpst_g <- function(count_sp_vec, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids) {
+    .Call(`_nbcf_rcpp_calculate_lpst_g`, count_sp_vec, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids)
 }
 
 rcpp_calculate_lpst <- function(count_sp_mat, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids) {

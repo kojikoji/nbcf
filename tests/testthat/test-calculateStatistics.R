@@ -37,12 +37,12 @@ test_that("calculate_pt_grid_lp work well", {
                c(300, 10))
 })
 
-test_that("calculate_lpst_g work well", {
+test_that("rcpp_calculate_lpst_g work well", {
   count.mat <- Matrix(rnbinom(6*800, 30, 0.995), nrow=6)
   lnb.dict <- setupLnbDict(max(count.mat), mean.bias.vec=runif(800, 0.8, 1.2),
                            r=30, alpha=2, beta=2, count.res=500, p.res=300)
   t.grids <- seq(0, 10)*80
-  lpst_g <- calculate_lpst_g(count.mat[1, ], lnb.dict@values, lnb.dict@lprior.values,
+  lpst_g <- rcpp_calculate_lpst_g(count.mat[1, ], lnb.dict@values, lnb.dict@lprior.values,
                  lnb.dict@count.dict, lnb.dict@p.dict, lnb.dict@p.width.vec, t.grids)
   expect_equal(sum(is.nan(lpst_g)),
               0)
@@ -70,6 +70,17 @@ test_that("calculateLpst work well", {
   expect_equal(sum(is.nan(lpst)),
               0)
   expect_equal(dim(lpst),
+              c(10, 10))
+})
+
+
+test_that("calculateLpst work well", {
+  count.mat <- Matrix(rnbinom(6*800, 30, 0.995), nrow=6)
+  lnb.dict <- setupLnbDict(max(count.mat), mean.bias.vec=runif(800, 0.8, 1.2),
+                           r=30, alpha=2, beta=2, count.res=500, p.res=300)
+  t.grids <- seq(0, 10)*80
+  one.var.lpst <- calculateOneVariateLpst(lnb.dict, count.mat[1, ], t.grids)
+  expect_equal(dim(one.var.lpst),
               c(10, 10))
 })
 

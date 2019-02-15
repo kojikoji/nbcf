@@ -1,7 +1,7 @@
 ##' Calculate the probability of count.mat[:, s:t]
 ##'
 ##' Based on probability values of grid points in \code{\link{lnb.dict}}, this calculate the probability values of specific time intervals of  \code{count.mat}
-##' @title calculatePst
+##' @title calculateLpst
 ##' @param lnb.dict see \code{\link{lnb.dict}}
 ##' @param count.mat Integer matrix, count data. each row and column represent variate and observation
 ##' @param t.grids Numeric vector, grid index of t.vec
@@ -15,7 +15,7 @@ calculateLpst <- function(lnb.dict, count.mat, t.grids){
 ##' Calculate the probability of count.mat[:, s:t] variate-wise
 ##'
 ##' Based on probability values of grid points in \code{lnb.dict}, this calculate the probability values of specific time intervals of  \code{count.mat}. This returns the list for each variate
-##' @title calculatePst
+##' @title calculateLpstList
 ##' @param lnb.dict see \code{\link{lnb.dict}}
 ##' @param count.mat Integer matrix, count data. each row and column represent variate and observation
 ##' @param t.grids Numeric vector, grid index of t.vec
@@ -27,10 +27,25 @@ calculateLpstList <- function(lnb.dict, count.mat, t.grids){
 }
 
 
+##' Calculate the probability of count from  time poinst \code{s} to \code{t} for one variate
+##'
+##' Based on probability values of grid points in \code{lnb.dict}, this calculate the probability values of specific time intervals of  \code{count.vec}. This returns a matrix whose row and column represent initial and end points of each interval
+##' @title calculateLpstOneVariate
+##' @param lnb.dict see \code{\link{lnb.dict}}
+##' @param count.vec Integer vector, count data. each elements represent each observation
+##' @param t.grids Numeric vector, grid index of t.vec
+##' @return lpst Numeric matrix, log probability for each time interval
+##' @author Yasuhiro Kojima
+calculateOneVariateLpst <- function(lnb.dict, count.vec, t.grids){
+  rcpp_calculate_lpst_g(count.vec, lnb.dict@values, lnb.dict@lprior.values,
+                        lnb.dict@count.dict, lnb.dict@p.dict, lnb.dict@p.width.vec, t.grids)
+}
+
+
 ##' Calculate ratio of probability between divided and merged for local bin
 ##'
 ##' Based on probability for each intervals, comparing probability for fixed length interval which is divided at half point or not.
-##' @title calculatePst
+##' @title calculateLpst
 ##' @param lpst Numeric matrix, log probability for each time interval
 ##' @return lhr.vec log ratio of compared probabilities
 ##' @author Yasuhiro Kojima

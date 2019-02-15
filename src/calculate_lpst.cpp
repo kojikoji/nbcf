@@ -59,7 +59,7 @@ Eigen::VectorXd colwise_log_sum_exp(const Eigen::MatrixXd &mat, const Eigen::Vec
 
 // calculate lpst for each variate
 // [[Rcpp::export]]
-Eigen::MatrixXd calculate_lpst_g(const Eigen::VectorXd &count_sp_vec,
+Eigen::MatrixXd rcpp_calculate_lpst_g(const Eigen::VectorXd &count_sp_vec,
 				 const Eigen::MatrixXd &grid_lnb_mat,
 				 const Eigen::VectorXd &lprior_vec,
 				 const Eigen::VectorXi &count_dict,
@@ -96,7 +96,7 @@ Eigen::MatrixXd rcpp_calculate_lpst(const Eigen::SparseMatrix<double> &count_sp_
 				    const Eigen::VectorXi &t_grids){
   Eigen::MatrixXd lpst = Eigen::MatrixXd::Zero(t_grids.size() - 1,  t_grids.size() - 1);
   for(int g = 0; g < count_sp_mat.rows(); g++){
-    lpst += calculate_lpst_g(count_sp_mat.row(g), grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids);
+    lpst += rcpp_calculate_lpst_g(count_sp_mat.row(g), grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids);
   }
   return(lpst);
 }
@@ -113,7 +113,7 @@ Rcpp::List rcpp_calculate_lpst_list(const Eigen::SparseMatrix<double> &count_sp_
   Rcpp::List lpst_list = Rcpp::List::create();
   Eigen::MatrixXd lpst = Eigen::MatrixXd::Zero(t_grids.size() - 1,  t_grids.size() - 1);
   for(int g = 0; g < count_sp_mat.rows(); g++){
-    lpst_list.push_back(calculate_lpst_g(count_sp_mat.row(g), grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids));
+    lpst_list.push_back(rcpp_calculate_lpst_g(count_sp_mat.row(g), grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids));
   }
   return(lpst_list);
 }

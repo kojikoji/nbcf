@@ -80,9 +80,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// calculate_lpst_g
-Eigen::MatrixXd calculate_lpst_g(const Eigen::VectorXd& count_sp_vec, const Eigen::MatrixXd& grid_lnb_mat, const Eigen::VectorXd& lprior_vec, const Eigen::VectorXi& count_dict, const Eigen::MatrixXi& p_dict, const Eigen::VectorXd& p_width_vec, const Eigen::VectorXi& t_grids);
-RcppExport SEXP _nbcf_calculate_lpst_g(SEXP count_sp_vecSEXP, SEXP grid_lnb_matSEXP, SEXP lprior_vecSEXP, SEXP count_dictSEXP, SEXP p_dictSEXP, SEXP p_width_vecSEXP, SEXP t_gridsSEXP) {
+// rcpp_calculate_lpst_g
+Eigen::MatrixXd rcpp_calculate_lpst_g(const Eigen::VectorXd& count_sp_vec, const Eigen::MatrixXd& grid_lnb_mat, const Eigen::VectorXd& lprior_vec, const Eigen::VectorXi& count_dict, const Eigen::MatrixXi& p_dict, const Eigen::VectorXd& p_width_vec, const Eigen::VectorXi& t_grids);
+RcppExport SEXP _nbcf_rcpp_calculate_lpst_g(SEXP count_sp_vecSEXP, SEXP grid_lnb_matSEXP, SEXP lprior_vecSEXP, SEXP count_dictSEXP, SEXP p_dictSEXP, SEXP p_width_vecSEXP, SEXP t_gridsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -93,7 +93,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const Eigen::MatrixXi& >::type p_dict(p_dictSEXP);
     Rcpp::traits::input_parameter< const Eigen::VectorXd& >::type p_width_vec(p_width_vecSEXP);
     Rcpp::traits::input_parameter< const Eigen::VectorXi& >::type t_grids(t_gridsSEXP);
-    rcpp_result_gen = Rcpp::wrap(calculate_lpst_g(count_sp_vec, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids));
+    rcpp_result_gen = Rcpp::wrap(rcpp_calculate_lpst_g(count_sp_vec, grid_lnb_mat, lprior_vec, count_dict, p_dict, p_width_vec, t_grids));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -163,7 +163,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_nbcf_accumulate_colwise", (DL_FUNC) &_nbcf_accumulate_colwise, 1},
     {"_nbcf_log_sum_exp", (DL_FUNC) &_nbcf_log_sum_exp, 2},
     {"_nbcf_colwise_log_sum_exp", (DL_FUNC) &_nbcf_colwise_log_sum_exp, 2},
-    {"_nbcf_calculate_lpst_g", (DL_FUNC) &_nbcf_calculate_lpst_g, 7},
+    {"_nbcf_rcpp_calculate_lpst_g", (DL_FUNC) &_nbcf_rcpp_calculate_lpst_g, 7},
     {"_nbcf_rcpp_calculate_lpst", (DL_FUNC) &_nbcf_rcpp_calculate_lpst, 7},
     {"_nbcf_rcpp_calculate_lpst_list", (DL_FUNC) &_nbcf_rcpp_calculate_lpst_list, 7},
     {"_nbcf_get_approximate_index", (DL_FUNC) &_nbcf_get_approximate_index, 2},
