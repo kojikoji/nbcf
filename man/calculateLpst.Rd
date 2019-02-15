@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculateLpst.R
 \name{calculateLpst}
 \alias{calculateLpst}
-\title{calculatePst}
+\title{calculateLpst}
 \usage{
 calculateLpst(lnb.dict, count.mat, t.grids)
 }

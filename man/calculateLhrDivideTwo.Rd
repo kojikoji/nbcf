@@ -2,7 +2,7 @@
 % Please edit documentation in R/calculateLpst.R
 \name{calculateLhrDivideTwo}
 \alias{calculateLhrDivideTwo}
-\title{calculatePst}
+\title{calculateLpst}
 \usage{
 calculateLhrDivideTwo(lpst, bin.prop = 0.2)
 }
