@@ -27,7 +27,7 @@ calculateMap <- function(lpst, lambda){
                              .init = end.stats
                              )
   ## trace back the shatl
-  traceGetShatl(stats$shatl, c(0))
+  map.change.point <- traceGetShatl(stats$shatl, c(0))
 }
 ##' Calculate statics for MAP estimate
 ##'

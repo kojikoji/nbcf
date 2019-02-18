@@ -34,29 +34,23 @@ calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
   ## t.grids will seprate observation into t.res bins
   t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
   ## variatewise change points estimation
-  change.point.df <- tibble()
-  for(var in rownames(count.mat)){
-    lpst <- calculateOneVariateLpst(lnb.dict, count.mat[var,], t.grids)
-    max.lhr <- max(calculateLhrDivideTwo(lpst))
-    ## use variates whose lhr exceeds min.lhr at any points
-    ## this means those variates are relatively more expected to divided into two models at some location
-    if(max.lhr > min.lhr){
+  change.point.df <- purrr::map_dfr(
+    rownames(count.mat),
+    function(var){
+      lpst <- calculateOneVariateLpst(lnb.dict, count.mat[var,], t.grids)
       lqt <- calculateLqt(lpst, lambda)
-      sim.change.point.vec <- unlist(perfectSimulation(lqt, lpst, lambda, sim.iter = sim.iter))
-      one.var.change.point.df <- tibble(var = var, change.point = sim.change.point.vec)
-      change.point.df <- rbind(change.point.df, one.var.change.point.df)
-    }
-  }
-  ## conver from grid index to t corresponding to end point of each grid
-  change.point.df <- dplyr::mutate(
-                              change.point.df,
-                              change.point = unlist(
-                                purrr::map(
-                                         change.point,
-                                         ~ (t.vec[t.grids[.x + 1]] +
-                                            t.vec[t.grids[.x + 2]]) / 2
-                                       )
-                              )
-                            )
+      bayes.factor <- lqt[1] - lpst[1, ncol(lpst)]
+      map.change.point <- calculateMap(lpst, lambda)
+      ## put NA for no change point variate
+      if(length(map.change.point) == 0) map.change.point <- NA
+      tibble(var = var, change.point = map.change.point, bayes.factor = bayes.factor)
+    })
+  ##:ess-bp-start::browser@nil:##
+  change.point.df <- change.point.df %>%
+    ## conver from grid index to t corresponding to end point of each grid
+    dplyr::mutate(change.point = t.vec[t.grids[change.point + 1]]) %>%
+    ## calculate FDR based on bayes factor
+    dplyr::arrange(desc(bayes.factor)) %>%
+    dplyr::mutate(FDR = cumsum(1/(1 + exp(bayes.factor)))/dplyr::row_number(desc(bayes.factor)))
   return(change.point.df)
 }
