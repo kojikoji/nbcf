@@ -11,13 +11,20 @@ calculateLqt <- function(lpst, lambda){
   lqt <- vector()
   lqt[t_len] <- lpst[t_len, t_len]
   logSumExp <- function(x) log(sum(exp(x - max(x)))) + max(x)
-  for(t in seq(t_len - 1, 1)){
-    lqt_vec <- unlist(purrr::map(
-                               t:(t_len-1),
-                               ~ lqt[.x + 1] + log(lambda) + (.x - t) * log(1 - lambda) + lpst[t,.x]))
-    no_change_lqt <- (t_len - t) * log(1 - lambda) + lpst[t, t_len]
-    lqt_vec <- c(lqt_vec, no_change_lqt)
-    lqt[t] <- logSumExp(lqt_vec)
+  calculateLqtVec <- function(t, s, pre.lqt){
+    (s - t) * log(1 - lambda) + lpst[t,s] + ifelse(s != t_len, pre.lqt[s + 1 - t] + log(lambda), 0)
   }
-  return(lqt)
+  purrr::reduce(
+           seq(t_len - 1, 1),
+           function(pre.lqt, t){
+             lqt_vec <- unlist(
+               purrr::map(
+                        t:t_len,
+                        ~ calculateLqtVec(t, .x, pre.lqt)
+                      )
+             )
+             c(logSumExp(lqt_vec), pre.lqt)
+           },
+           .init = lpst[t_len, t_len]
+         )
 }
