@@ -20,7 +20,7 @@
 
 calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
-                          p.res=1000, count.res=1000, t.res=100, sim.iter=100){
+                          p.res=1000, count.res=1000, t.res=100, sim.iter=100, min.lhr=10){
   ## count.mat and mean.bias.vec  are ordered based on t.vec 
   count.mat <- count.mat[, order(t.vec)]
   mean.bias.vec <- mean.bias.vec[order(t.vec)]
@@ -37,10 +37,15 @@ calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
   change.point.df <- tibble()
   for(var in rownames(count.mat)){
     lpst <- calculateOneVariateLpst(lnb.dict, count.mat[var,], t.grids)
-    lqt <- calculateLqt(lpst, lambda)
-    sim.change.point.vec <- unlist(perfectSimulation(lqt, lpst, lambda))
-    one.var.change.point.df <- tibble(var = var, change.point = sim.change.point.vec)
-    change.point.df <- rbind(change.point.df, one.var.change.point.df)
+    max.lhr <- max(calculateLhrDivideTwo(lpst))
+    ## use variates whose lhr exceeds min.lhr at any points
+    ## this means those variates are relatively more expected to divided into two models at some location
+    if(max.lhr > min.lhr){
+      lqt <- calculateLqt(lpst, lambda)
+      sim.change.point.vec <- unlist(perfectSimulation(lqt, lpst, lambda, sim.iter = sim.iter))
+      one.var.change.point.df <- tibble(var = var, change.point = sim.change.point.vec)
+      change.point.df <- rbind(change.point.df, one.var.change.point.df)
+    }
   }
   ## conver from grid index to t corresponding to end point of each grid
   change.point.df <- dplyr::mutate(

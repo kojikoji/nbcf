@@ -15,7 +15,8 @@
 ##' @return Nbcf, nbcf Instance of class \code{\link{Nbcf}}
 ##' @seealso [Nbcf]
 ##' @author Yasuhiro Kojima
-##' 
+##'
+##' @import purrr
 ##' @export
 
 calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
@@ -53,13 +54,16 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   lqt <- calculateLqt(lpst, lambda)
   sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
   sig.ct <- decideSignificantChange(sim.change.point.list)
-  map.change.point <- vector() ## estimateMap(lqt, lpst, lambda)
+  map.change.point <- calculateMap(lpst, lambda)
   change.variate.df <- findChangeVariate(lpst.list, used.vars, sig.ct, lambda = lambda) %>% ## map.ct will be used
     dplyr::filter(median.change.num == 1)
   ## conver from grid index to t corresponding to end point of each grid
   outer.sim.change.point.list <- purrr::map(
                                     sim.change.point.list,
                                     ~ t.vec[t.grids[.x + 1]])
+  outer.map.change.point <- unlist(purrr::map(
+                                    map.change.point,
+                                    ~ t.vec[t.grids[.x + 1]]))
   nbcf <- new("Nbcf",
               count.mat = count.mat,
               t.vec = t.vec,
@@ -77,7 +81,7 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
               used.vars = used.vars,
               lqt = lqt,
               sim.change.point.list = outer.sim.change.point.list,
-              map.change.point = map.change.point,
+              map.change.point = outer.map.change.point,
               change.variate.df = change.variate.df)
   return(nbcf)
 }

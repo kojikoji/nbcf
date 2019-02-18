@@ -1,11 +1,5 @@
 context("test-setupLpst")
 
-test_that("test accumulate_colwise", {
-  expect_equal(
-    accumulate_colwise(
-      matrix(c(1, 2, 3, 4, 5, 6), nrow=2)),
-    matrix(c(1, 2, 1+3, 2+4, 1+3+5, 2+4+6), nrow=2))
-})
 
 test_that("log_sum_exp works", {
   logSumExp <- function(x) log(sum(exp(x - max(x)))) + max(x)
@@ -13,15 +7,6 @@ test_that("log_sum_exp works", {
   expect_equal(
     log_sum_exp(vec, c(1, 1, 1)),
     logSumExp(vec))
-})
-
-test_that("log_sum_exp works", {
-  logSumExp <- function(x) log(sum(exp(x - max(x)))) + max(x)
-  vec1 <- c(-2, -12, -8)
-  vec2 <- c(-1, -9, -2)
-  expect_equal(
-    colwise_log_sum_exp(matrix(c(vec1, vec2), ncol=2), rep(1, 3)),
-    c(logSumExp(vec1), logSumExp(vec2)))
 })
 
 test_that("calculate_pt_grid_lp work well", {
