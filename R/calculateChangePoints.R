@@ -16,6 +16,7 @@
 ##' @author Yasuhiro Kojima
 ##'
 ##' @import tibble
+##' @import dplyr
 ##' @export
 
 calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
@@ -50,7 +51,7 @@ calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
     ## conver from grid index to t corresponding to end point of each grid
     dplyr::mutate(change.point = t.vec[t.grids[change.point + 1]]) %>%
     ## calculate FDR based on bayes factor
-    dplyr::arrange(desc(bayes.factor)) %>%
-    dplyr::mutate(FDR = cumsum(1/(1 + exp(bayes.factor)))/dplyr::row_number(desc(bayes.factor)))
+    dplyr::arrange(dplyr::desc(bayes.factor)) %>%
+    dplyr::mutate(FDR = cumsum(1/(1 + exp(bayes.factor)))/dplyr::row_number(dplyr::desc(bayes.factor)))
   return(change.point.df)
 }
