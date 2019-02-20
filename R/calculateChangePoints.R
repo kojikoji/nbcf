@@ -12,6 +12,7 @@
 ##' @param count.res Integer, Approximation resolution of count.
 ##' @param t.res Integer, Approximation resolution of t.
 ##' @param sim.iter Integer, Iteration of perfect simulation. See \code{\link{perfectSimulation}}
+##' @param method Specify the method to calculate change points. \code{"map"} or \code{"sim"}
 ##' @return change.point.df, Data frame, This contains simulated change points for each variates. This is composed of columns of changed variates, change point coordinates.
 ##' @author Yasuhiro Kojima
 ##'
@@ -21,7 +22,7 @@
 
 calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
-                          p.res=1000, count.res=1000, t.res=100, sim.iter=100, min.lhr=10){
+                          p.res=1000, count.res=1000, t.res=100, sim.iter=100, method = "map"){
   ## count.mat and mean.bias.vec  are ordered based on t.vec 
   count.mat <- count.mat[, order(t.vec)]
   mean.bias.vec <- mean.bias.vec[order(t.vec)]
@@ -41,12 +42,28 @@ calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
       lpst <- calculateOneVariateLpst(lnb.dict, count.mat[var,], t.grids)
       lqt <- calculateLqt(lpst, lambda)
       bayes.factor <- lqt[1] - lpst[1, ncol(lpst)]
-      map.change.point <- calculateMap(lpst, lambda)
-      ## put NA for no change point variate
-      if(length(map.change.point) == 0) map.change.point <- NA
-      tibble(var = var, change.point = map.change.point, bayes.factor = bayes.factor)
+      if(method == "map"){
+        map.change.point <- calculateMap(lpst, lambda)
+        ## put NA for no change point variate
+        if(length(map.change.point) == 0) map.change.point <- NA
+        tibble(var = var, change.point = map.change.point, bayes.factor = bayes.factor)
+      }else{
+        lqt <- calculateLqt(lpst, lambda)
+        sim.change.table <- table(unlist(perfectSimulation(lqt, lpst, lambda, sim.iter = sim.iter)))
+        ## put NA for no change point variate
+        if(length(sim.change.table) == 0){
+          tibble(var = var,
+                 change.point = NA,
+                 count = 0,
+                 bayes.factor = bayes.factor)
+        }else{
+          tibble(var = var,
+                 change.point = as.numeric(names(sim.change.table)),
+                 count = unlist(purrr::map(change.point, ~ sim.change.table[[as.character(.x)]])),
+                 bayes.factor = bayes.factor)
+        }
+      }
     })
-  ##:ess-bp-start::browser@nil:##
   change.point.df <- change.point.df %>%
     ## conver from grid index to t corresponding to end point of each grid
     dplyr::mutate(change.point = t.vec[t.grids[change.point + 1]]) %>%
@@ -55,3 +72,5 @@ calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
     dplyr::mutate(FDR = cumsum(1/(1 + exp(bayes.factor)))/dplyr::row_number(dplyr::desc(bayes.factor)))
   return(change.point.df)
 }
+
+
