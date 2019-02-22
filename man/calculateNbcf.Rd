@@ -6,7 +6,7 @@
 \usage{
 calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
   r = 30, lambda = 0.01, p.res = 1000, count.res = 1000,
-  t.res = 100, min.lhr = 10)
+  t.res = 100)
 }
 \arguments{
 \item{count.mat}{dgCmatrix, Count matrix. Each row represent each variate. Each column represent each observation}
@@ -24,8 +24,6 @@ calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
 \item{count.res}{Integer, Approximation resolution of count.}
 
 \item{t.res}{Integer, Approximation resolution of t.}
-
-\item{min.lhr}{Numeric, Threshold for probability rate between merged and divided models}
 }
 \value{
 Nbcf, nbcf Instance of class \code{\link{Nbcf}}
