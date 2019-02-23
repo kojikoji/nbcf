@@ -138,10 +138,11 @@ test_that("findChangeVariate correctly mine changed variates for each change poi
                           alpha, beta, r, lambda,
                         p.res, count.res, t.res)
   change1.df <- nbcf@change.variate.df %>%
-    dplyr::filter(ct - 400 == min(ct - 400))
+    dplyr::filter(change.point - 400 == min(change.point - 400)) %>%
+    dplyr::arrange(dplyr::desc(change.point))
   expect_equal(
-    change1.df$var,
-    as.character(seq(6))
+    sort(as.numeric(change1.df$var[1:6])),
+    sort(seq(6))
   )
     
 })

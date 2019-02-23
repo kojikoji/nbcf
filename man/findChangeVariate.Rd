@@ -14,13 +14,13 @@ findChangeVariate(lpst.list, used.vars, ct.vec, lambda = 0.5)
 \item{ct.vec}{Numeric vector, change point vector}
 }
 \value{
-change.var.df tibble, contains variate names, corresponding change point, entropy and change number among corresponding intervals
+change.var.df tibble, contains variate names, change points and bayes factors
 }
 \description{
 Find change variates at each change points
 }
 \details{
-This function calculate the relation ships between change points and variates which have one change points among previous and following change points for each change point. Furthermore, we calculate the entropy of the change point and following change point.
+This function calculate the signicance of  change points for each variate variates.
 }
 \author{
 Yasuhiro Kojima

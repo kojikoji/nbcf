@@ -1,47 +1,36 @@
 ##' Find change variates at each change points
 ##'
-##' This function calculate the relation ships between change points and variates which have one change points among previous and following change points for each change point. Furthermore, we calculate the entropy of the change point and following change point.
+##' This function calculate the signicance of  change points for each variate variates.
 ##' @title findChangeVariate
 ##' @param lpst.list list of Numeric matrix, list of log probability for each intervals for each variate
 ##' @param used.vars vector, names of variates used in change point finding
 ##' @param ct.vec Numeric vector, change point vector
-##' @return change.var.df tibble, contains variate names, corresponding change point, entropy and change number among corresponding intervals
+##' @return change.var.df tibble, contains variate names, change points and bayes factors
 ##' @author Yasuhiro Kojima
+##' @import tidyverse
 findChangeVariate <- function(lpst.list, used.vars, ct.vec, lambda = 0.5){
   if(length(ct.vec) > 0){
     ## add ct vec to begin and end of time
-    extended.ct.vec <- c(0, ct.vec, ncol(lpst.list[[1]]))
-    change.var.df <- tibble()
-    for(var in used.vars){
-      for(ct.idx in seq(length(ct.vec))){
-        ct  <-  ct.vec[ct.idx]
-        previous.ct  <-  extended.ct.vec[ct.idx - 1 + 1]
-        following.ct  <-  extended.ct.vec[ct.idx + 1 + 1]
-        lpst  <-  lpst.list[[var]][(previous.ct + 1):following.ct,
-          (previous.ct + 1):following.ct]
-        lqt  <-  calculateLqt(lpst, lambda)
-        sim.ct.list  <-  perfectSimulation(lqt, lpst, lambda)
-        median.change.num  <-  median(
-          unlist(purrr::map(
-                          sim.ct.list,
-                          ~ length(.x)
-                        )
-                 )
-        )
-        entropy <- calculateEntropyTwoCt(lqt, lpst, lambda)
-        change.var.df <- rbind(change.var.df,
-                               tibble(ct = ct,
-                                      var = var,
-                                      median.change.num = median.change.num,
-                                      entropy = entropy
-                                      )
-                               )
-      }
-    }
+    extended.ct.vec <- c(1, ct.vec, ncol(lpst.list[[1]]))
+    ##:ess-bp-start::browser@nil:##
+    purrr::map_dfr(
+             cross(list(var = used.vars, ct.idx = seq(length(ct.vec)))),
+             function(var.list){
+               var <- var.list[["var"]]
+               ct.idx <- var.list[["ct.idx"]]
+               ct  <-  ct.vec[ct.idx]
+               previous.ct  <-  extended.ct.vec[ct.idx - 1 + 1]
+               following.ct  <-  extended.ct.vec[ct.idx + 1 + 1]
+               joined.lpst <- lpst.list[[var]][previous.ct, following.ct]
+               divided.lpst <- lpst.list[[var]][previous.ct, ct] + lpst.list[[var]][(ct+1), following.ct]
+               bayes.factor <- divided.lpst + joined.lpst
+               ##:ess-bp-start::browser@nil:##
+tibble(var = var, change.point = ct, bayes.factor = bayes.factor)
+             }
+           )
   }else{
-    change.var.df <- tibble()
+    tibble()
   }
-  return(change.var.df)
 }
 
 

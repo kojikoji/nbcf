@@ -46,15 +46,16 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
   sig.ct <- decideSignificantChange(sim.change.point.list)
   map.change.point <- calculateMap(lpst, lambda)
-  change.variate.df <- findChangeVariate(lpst.list, used.vars, sig.ct, lambda = lambda) %>% ## map.ct will be used
-    dplyr::filter(median.change.num == 1)
+  change.variate.df <- findChangeVariate(lpst.list, used.vars, sig.ct, lambda = lambda)
   ## conver from grid index to t corresponding to end point of each grid
+  convertTidx2T <- function(t.idx.vec){
+    unlist(purrr::map(t.idx.vec, ~ t.vec[t.grids[.x + 1]]))
+  }
   outer.sim.change.point.list <- purrr::map(
                                     sim.change.point.list,
                                     ~ t.vec[t.grids[.x + 1]])
-  outer.map.change.point <- unlist(purrr::map(
-                                    map.change.point,
-                                    ~ t.vec[t.grids[.x + 1]]))
+  outer.map.change.point <- convertTidx2T(map.change.point)
+  change.variate.df$change.point <- convertTidx2T(change.variate.df$change.point)
   nbcf <- new("Nbcf",
               count.mat = count.mat,
               t.vec = t.vec,
