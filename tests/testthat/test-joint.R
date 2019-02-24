@@ -176,7 +176,7 @@ test_that("calculateChangePoints correctly mine changed points for each variate"
   v1.ct.vec <- dplyr::filter(change.point.df, var == "1")$change.point
   expect_lt(
     abs(mean(v1.ct.vec - 400)),
-    100
+    200
   )
   
   v2.ct.vec <- dplyr::filter(change.point.df, var == "7")$change.point
@@ -299,4 +299,33 @@ test_that("bayes.factor and FDR calculation in calculateChangePoints is work wel
   expect_true(
     min(v2.df$FDR) > max(v1.df$FDR)
   )    
+})
+
+test_that("bayes.factor of calculateNbcf works well", {
+  alpha=2.0
+  beta=2.0
+  r=30
+  lambda=1.0e-2
+  p.res=1000
+  count.res=500
+  t.res=100
+  tnum <- 1000
+  t.vec <- seq(tnum)
+  c1.true.change.point <- 400
+  c1.before.change.vec <- rnbinom(6*(c1.true.change.point), 30, 0.995)
+  c1.after.change.vec <- rnbinom(6*(tnum - c1.true.change.point), 30, 0.95)
+  c1.count.mat <- Matrix(c(c1.before.change.vec, c1.after.change.vec), nrow=6, sparse=T)
+  ## unchanged variates
+  c2.vec <- rnbinom(6*(tnum), 30, 0.995)
+  c2.count.mat <- Matrix(c2.vec, ncol=tnum, sparse=T)
+  count.mat <- rbind(c1.count.mat, c2.count.mat)
+  rownames(count.mat) <- as.character(seq(nrow(count.mat)))
+  mean.bias.vec <- rep(1, length(t.vec))
+  ## estimation
+  nbcf.obj <- calculateNbcf(count.mat, t.vec, mean.bias.vec,
+                                   alpha, beta, r, lambda,
+                                   p.res, count.res, t.res)
+  expect_true(
+    nbcf.obj@bf.list[["1"]] > nbcf.obj@bf.list[["7"]]
+  )
 })

@@ -23,7 +23,7 @@ findChangeVariate <- function(lpst.list, used.vars, ct.vec, lambda = 0.5){
                following.ct  <-  extended.ct.vec[ct.idx + 1 + 1]
                joined.lpst <- lpst.list[[var]][previous.ct, following.ct]
                divided.lpst <- lpst.list[[var]][previous.ct, ct] + lpst.list[[var]][(ct+1), following.ct]
-               bayes.factor <- divided.lpst + joined.lpst
+               bayes.factor <- divided.lpst - joined.lpst
                ##:ess-bp-start::browser@nil:##
 tibble(var = var, change.point = ct, bayes.factor = bayes.factor)
              }

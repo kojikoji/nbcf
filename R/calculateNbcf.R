@@ -33,20 +33,15 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   ## t.grids will seprate observation into t.res bins
   t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
   lpst.list <- calculateLpstList(lnb.dict, count.mat, t.grids)
-  ## add variate names for lpst.list
   names(lpst.list) <- rownames(count.mat)
-  lhr.max.list <- unlist(
-    purrr::map(lpst.list,
-               ~ max(calculateLhrDivideTwo(.x))
-               )
-  )
+  lqt.list <- purrr::map(lpst.list, ~ calculateLqt(.x, lambda))
+  bf.list <- purrr::map2(lqt.list, lpst.list, ~ .x[1] - .y[1, ncol(.y)])
   lpst <- purrr::reduce(lpst.list, ~ .x + .y)
   used.vars <- rownames(count.mat)
   lqt <- calculateLqt(lpst, lambda)
   sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
-  sig.ct <- decideSignificantChange(sim.change.point.list)
   map.change.point <- calculateMap(lpst, lambda)
-  change.variate.df <- findChangeVariate(lpst.list, used.vars, sig.ct, lambda = lambda)
+  change.variate.df <- findChangeVariate(lpst.list, used.vars, map.change.point, lambda = lambda)
   ## conver from grid index to t corresponding to end point of each grid
   convertTidx2T <- function(t.idx.vec){
     unlist(purrr::map(t.idx.vec, ~ t.vec[t.grids[.x + 1]]))
@@ -69,9 +64,11 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                 count.res = count.res),
               lnb.dict = lnb.dict,
               lpst = lpst,
-              lpst.list = lpst.list,
-              used.vars = used.vars,
               lqt = lqt,
+              lpst.list = lpst.list,
+              lqt.list = lqt.list,
+              bf.list = bf.list,
+              used.vars = used.vars,
               sim.change.point.list = outer.sim.change.point.list,
               map.change.point = outer.map.change.point,
               change.variate.df = change.variate.df)

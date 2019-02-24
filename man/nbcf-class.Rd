@@ -23,11 +23,15 @@ You should firstly apply calculateQt and after either perfectSimulation or estim
 
 \item{\code{lpst}}{Numeric matrix, log probability of Ys:t}
 
+\item{\code{lqt}}{Numeric vector, log probability of Yt:n given there is change point in t-1}
+
 \item{\code{lpst.list}}{Numeric matrix, list of \code{lpst} for each variate}
 
-\item{\code{used.vars}}{Character vector, variates used for change points calculation}
+\item{\code{lqt.list}}{Numeric matrix, list of \code{lqt} for each variate}
 
-\item{\code{lqt}}{Numeric vector, log probability of Yt:n given there is change point in t-1}
+\item{\code{bf.list}}{Numeric matrix, list of bayes factor for each variate. The larger values indicate the variate changed in time course.}
+
+\item{\code{used.vars}}{Character vector, variates used for change points calculation}
 
 \item{\code{sim.change.point.list}}{List, each elements contains change points simulated from perfectSimulation}
 
