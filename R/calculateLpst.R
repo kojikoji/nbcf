@@ -57,8 +57,8 @@ calculateLhrDivideTwo <- function(lpst, bin.prop=0.2){
   end <- ncol(lpst) - (half.width - 1)
   t.vec <- seq(init, end)
   names(t.vec) <- as.character(t.vec)
-  lhr.vec <- unlist(purrr::map(,
-                               ~ lpst[.x - half.width,(.x - 1)] + lpst[.x,.x + (half.width - 1)] - lpst[.x - half.width, .x + (half.width - 1)]
+  lhr.vec <- unlist(purrr::map(t.vec,
+                               ~ lpst[.x - half.width,(.x - 1)] + lpst[.x, .x + (half.width - 1)] - lpst[.x - half.width, .x + (half.width - 1)]
                                )
                     )
   return(lhr.vec)
