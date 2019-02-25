@@ -49,6 +49,8 @@ calculateOneVariateLpst <- function(lnb.dict, count.vec, t.grids){
 ##' @param lpst Numeric matrix, log probability for each time interval
 ##' @return lhr.vec log ratio of compared probabilities
 ##' @author Yasuhiro Kojima
+##' @export
+
 calculateLhrDivideTwo <- function(lpst, bin.prop=0.2){
   half.width <- as.integer((ncol(lpst)*bin.prop)/2)
   init <- half.width + 1

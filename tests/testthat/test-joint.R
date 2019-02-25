@@ -182,7 +182,7 @@ test_that("calculateChangePoints correctly mine changed points for each variate"
   v2.ct.vec <- dplyr::filter(change.point.df, var == "7")$change.point
   expect_lt(
     abs(mean(v2.ct.vec - 700)),
-    100
+    200
   )
     
 })

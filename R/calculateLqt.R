@@ -6,6 +6,8 @@
 ##' @param lambda Numeric, Prior probability for change point occurrence per step
 ##' @return lqt Numeric vector, Each value represents Yt:n probability
 ##' @author Yasuhiro Kojima
+##' @export
+
 calculateLqt <- function(lpst, lambda){
   t_len <- ncol(lpst)
   lqt <- vector()
