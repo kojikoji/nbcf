@@ -11,6 +11,7 @@
 ##' @param p.res Integer, Approximation resolution of parameter p
 ##' @param count.res Integer, Approximation resolution of count.
 ##' @param t.res Integer, Approximation resolution of t.
+##' @param map.fix.num Integer, the number of map change points. If it is \code{NULL}, the point number is automaticaly estimated
 ##' @return Nbcf, nbcf Instance of class \code{\link{Nbcf}}
 ##' @seealso [Nbcf]
 ##' @author Yasuhiro Kojima
@@ -20,7 +21,7 @@
 
 calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
-                          p.res=1000, count.res=1000, t.res=100){
+                          p.res=1000, count.res=1000, t.res=100, map.fix.num = NULL){
   ## count.mat and mean.bias.vec  are ordered based on t.vec 
   count.mat <- count.mat[, order(t.vec)]
   mean.bias.vec <- mean.bias.vec[order(t.vec)]
@@ -40,7 +41,11 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   used.vars <- rownames(count.mat)
   lqt <- calculateLqt(lpst, lambda)
   sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
-  map.change.point <- calculateMap(lpst, lambda)
+  if(is.numeric(map.fix.num)){
+    map.change.point <- calculateMapFix(lpst, lambda, map.fix.num)
+  }else{
+    map.change.point <- calculateMap(lpst, lambda)
+  }
   change.variate.df <- findChangeVariate(lpst.list, used.vars, map.change.point, lambda = lambda)
   ## conver from grid index to t corresponding to end point of each grid
   convertTidx2T <- function(t.idx.vec){

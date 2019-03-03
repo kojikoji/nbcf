@@ -6,7 +6,7 @@
 \usage{
 calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
   r = 30, lambda = 0.01, p.res = 1000, count.res = 1000,
-  t.res = 100)
+  t.res = 100, map.fix.num = NULL)
 }
 \arguments{
 \item{count.mat}{dgCmatrix, Count matrix. Each row represent each variate. Each column represent each observation}
@@ -24,6 +24,8 @@ calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
 \item{count.res}{Integer, Approximation resolution of count.}
 
 \item{t.res}{Integer, Approximation resolution of t.}
+
+\item{map.fix.num}{Integer, the number of map change points. If it is \code{NULL}, the point number is automaticaly estimated}
 }
 \value{
 Nbcf, nbcf Instance of class \code{\link{Nbcf}}

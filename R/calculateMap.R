@@ -11,24 +11,54 @@ calculateMap <- function(lpst, lambda){
   ## calculate statics
   time.num <- ncol(lpst)
   end.stats <- list(lql = lpst[time.num, time.num], shatl = c(time.num))
-  stats <- purrr::reduce(seq(time.num - 1, 1),
-                             function(pre.stats, t){
-                               lrl <- purrr::map(
-                                               seq(t, time.num),
-                                               function(s){
-                                                 calculateLr(t, s, pre.stats$lql, lpst, lambda, time.num)
-                                               }
-                                             )
-                               list(
-                                 lql = c(max(unlist(lrl)), pre.stats$lql),
-                                 shatl = c(which.max(unlist(lrl)) + (t - 1), pre.stats$shatl)
-                               )
-                             },
-                             .init = end.stats
-                             )
+  calculateStatsElement <- function(pre.stats, t){
+    lrl <- purrr::map(
+                    seq(t, time.num),
+                    function(s){
+                      calculateLr(t, s, pre.stats$lql, lpst, lambda, time.num)
+                    }
+                  )
+    list(
+      lql = c(max(unlist(lrl)), pre.stats$lql),
+      shatl = c(which.max(unlist(lrl)) + (t - 1), pre.stats$shatl)
+    )
+  }
+  stats <- purrr::reduce(seq(time.num - 1, 1), calculateStatsElement, .init = end.stats)
   ## trace back the shatl
   map.change.point <- traceGetShatl(stats$shatl, c(0))
 }
+
+##' Calculation of map estimates for fixed number change points
+##'
+##' This calculation is based on log probability for each observation intervals. see \code{\link{calculateLpst}}.
+##' @title calculateMap
+##' @param lpst Numeric matrix, log probability for each observation intervals
+##' @param lambda Numeric, prior probability for change points in each transition
+##' @return map.change.point, Numeric vector, MAP estimates of change points 
+##' @author Yasuhiro Kojima
+##' @import purrr
+calculateMapFix <- function(lpst, lambda, K){
+  ## calculate statics
+  time.num <- ncol(lpst)
+  end.stats <- list(lql = lpst[time.num, time.num], shatl = c(time.num))
+  calculateLs <- function(s, t, lql){
+    lpst[t, s] +  (s - t) * log(1 - lambda) + ifelse(s != time.num, log(lambda) + lql[s + 1], -Inf)
+  }
+  calculateStatsKEach <- function(t, lqpkl){
+    ls.vec <- purrr::map(seq(t, time.num), calculateLs, t, lqpkl) %>% unlist()
+    list(lqk = max(ls.vec), shat = which.max(ls.vec) + t - 1)
+  }
+  calculateStatsK <- function(pre.k.stats, k){
+    stats.k.list <- purrr::map(seq(1, time.num), calculateStatsKEach, pre.k.stats$lqkl)
+    list(lqkl = unlist(purrr::map(stats.k.list, ~ .x$lqk)), shatl = unlist(purrr::map(stats.k.list, ~ .x$shat)))
+  }
+  init.stats <- list(lqkl = unlist(purrr::map(seq(1, time.num), ~ lpst[.x, time.num])), shatl = rep(time.num, time.num))
+  stats.list <- purrr::accumulate(seq(1, K), calculateStatsK, .init = init.stats)
+  map.change.point <- unlist(purrr::accumulate(seq(K, 1), ~ stats.list[[.y + 1]]$shatl[.x + 1], .init = 0))
+  map.change.point[2:length(map.change.point)]
+}
+
+
 ##' Calculate statics for MAP estimate
 ##'
 ##' Calculate the log probability assuming  there is no change points between t ~ s, and change points are MAP for s+1 ~ time.num

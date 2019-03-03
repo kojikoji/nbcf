@@ -17,3 +17,13 @@ test_that("calculateMap work well",{
     length(map.change.point),
     10)
 })
+
+
+test_that("calculateMapFix work well",{
+  lpst <- matrix(runif(100, -10, -1), nrow=10)
+  lambda <- 0.01
+  map.change.point <- calculateMapFix(lpst, lambda, 3)
+  expect_equal(
+    length(map.change.point),
+    3)
+})

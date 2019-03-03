@@ -215,13 +215,13 @@ test_that("calculateChangePoints correctly mine changed points for each variate,
   v1.ct.vec <- dplyr::filter(change.point.df, var == "1")$change.point
   expect_lt(
     abs(mean(v1.ct.vec - 400)),
-    100
+    200
   )
   
   v2.ct.vec <- dplyr::filter(change.point.df, var == "7")$change.point
   expect_lt(
     abs(mean(v2.ct.vec - 700)),
-    100
+    200
   )
     
 })
@@ -264,8 +264,57 @@ test_that("MAP estimate correctly mine two wchange points", {
   expect_equal(
     change.point.num,
     2)
+  expect_equal(
+    order(nbcf@map.change.point),
+    seq(change.point.num)
+  )
 })
 
+
+
+test_that("MAP estimate with fix num correctly mine two wchange points", {
+  alpha=2.0
+  beta=2.0
+  r=30
+  lambda=1.0e-2
+  p.res=1000
+  count.res=500
+  t.res=100
+  tnum <- 1000
+  t.vec <- seq(tnum)
+  c1.true.change.point <- 400
+  c1.before.change.vec <- rnbinom(6*(c1.true.change.point), 30, 0.995)
+  c1.after.change.vec <- rnbinom(6*(tnum - c1.true.change.point), 30, 0.95)
+  c1.count.mat <- Matrix(c(c1.before.change.vec, c1.after.change.vec), nrow=6, sparse=T)
+  c2.true.change.point <- 700
+  c2.before.change.vec <- rnbinom(6*(c2.true.change.point), 30, 0.995)
+  c2.after.change.vec <- rnbinom(6*(tnum - c2.true.change.point), 30, 0.95)
+  c2.count.mat <- Matrix(c(c2.before.change.vec, c2.after.change.vec), nrow=6, sparse=T)
+  count.mat <- rbind(c1.count.mat, c2.count.mat)
+  mean.bias.vec <- rep(1, length(t.vec))
+  ## estimation
+  nbcf <- calculateNbcf(count.mat, t.vec, mean.bias.vec,
+                          alpha, beta, r, lambda,
+                          p.res, count.res, t.res, map.fix.num = 2)
+  ## check distance from true points
+  min.dist.from.400 <- min(abs(nbcf@map.change.point - 400))
+  expect_lt(
+    min.dist.from.400,
+    10)
+  min.dist.from.700 <- min(abs(nbcf@map.change.point - 700))
+  expect_lt(
+    min.dist.from.700,
+    10)
+  ## check change points num
+  change.point.num <- length(nbcf@map.change.point)
+  expect_equal(
+    change.point.num,
+    2)
+  expect_equal(
+    order(nbcf@map.change.point),
+    seq(change.point.num)
+  )
+})
 
 test_that("bayes.factor and FDR calculation in calculateChangePoints is work well", {
   alpha=2.0
