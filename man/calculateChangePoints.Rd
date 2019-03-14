@@ -6,7 +6,8 @@
 \usage{
 calculateChangePoints(count.mat, t.vec, mean.bias.vec, alpha = 1,
   beta = 1, r = 30, lambda = 0.01, p.res = 1000,
-  count.res = 1000, t.res = 100, sim.iter = 100, method = "map")
+  count.res = 1000, t.res = 100, sim.iter = 100, method = "map",
+  map.num = 2)
 }
 \arguments{
 \item{count.mat}{dgCmatrix, Count matrix. Each row represent each variate. Each column represent each observation}
@@ -28,6 +29,8 @@ calculateChangePoints(count.mat, t.vec, mean.bias.vec, alpha = 1,
 \item{sim.iter}{Integer, Iteration of perfect simulation. See \code{\link{perfectSimulation}}}
 
 \item{method}{Specify the method to calculate change points. \code{"map"} or \code{"sim"}}
+
+\item{map.num}{Number of change points. This works only if you specify method as \code{"map"}}
 }
 \value{
 change.point.df, Data frame, This contains simulated change points for each variates. This is composed of columns of changed variates, change point coordinates.
