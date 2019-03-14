@@ -23,7 +23,7 @@
 
 calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
-                          p.res=1000, count.res=1000, t.res=100, sim.iter=100, method = "map", map.num = 2){
+                          p.res=1000, count.res=1000, t.res=100, sim.iter=100, method = "map", map.num = 1){
   ## count.mat and mean.bias.vec  are ordered based on t.vec 
   count.mat <- count.mat[, order(t.vec)]
   mean.bias.vec <- mean.bias.vec[order(t.vec)]
@@ -44,7 +44,7 @@ calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
       lqt <- calculateLqt(lpst, lambda)
       bayes.factor <- lqt[1] - lpst[1, ncol(lpst)]
       if(method == "map"){
-        map.change.point <- calculateMapFix(lpst, lambda, 2)
+        map.change.point <- calculateMapFix(lpst, lambda, map.num)
         ## put NA for no change point variate
         if(length(map.change.point) == 0) map.change.point <- NA
         tibble(var = var, change.point = map.change.point, bayes.factor = bayes.factor)
