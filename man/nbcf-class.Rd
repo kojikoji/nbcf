@@ -21,7 +21,7 @@ You should firstly apply calculateQt and after either perfectSimulation or estim
 
 \item{\code{lpst}}{Numeric matrix, log probability of Ys:t}
 
-\item{\code{lqt}}{Numeric vector, log probability of Yt:n given there is change point in t-1}
+\item{\code{lqt}}{Numeric vector, log probability of Yt:n given there is change point in t-1. This will be maximum probability given k points when you give them.}
 
 \item{\code{lpst.list}}{Numeric matrix, list of \code{lpst} for each variate}
 

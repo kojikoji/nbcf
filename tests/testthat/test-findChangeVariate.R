@@ -22,6 +22,6 @@ test_that("findChangeVariate returns right shape data frame",{
         2 * 2)
     expect_equal(
         ncol(change.var.df),
-        3)
+        4)
 
 })
