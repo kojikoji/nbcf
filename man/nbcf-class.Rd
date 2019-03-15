@@ -19,8 +19,6 @@ You should firstly apply calculateQt and after either perfectSimulation or estim
 
 \item{\code{params}}{List, named list of parameters, whose mebers must be "lambda", "r", "alpha" and "beta".}
 
-\item{\code{lnb.dict}}{LnbDict, Storage for precomputated log negative binomial probability. This is a instance of  \code{\link{LnbDict}}.}
-
 \item{\code{lpst}}{Numeric matrix, log probability of Ys:t}
 
 \item{\code{lqt}}{Numeric vector, log probability of Yt:n given there is change point in t-1}

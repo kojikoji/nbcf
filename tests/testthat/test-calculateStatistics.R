@@ -58,6 +58,18 @@ test_that("calculateLpst work well", {
               c(10, 10))
 })
 
+test_that("calculateLpstVar work well", {
+  count.mat <- Matrix(rnbinom(6*800, 30, 0.995), nrow=6)
+  t.grids <- seq(0, 10)*80
+  mean.bias.vec <- rep(1, 800)
+  rownames(count.mat) <- as.character(seq(nrow(count.mat)))
+  lpst <- calculateVarLpstList(count.mat, mean.bias.vec, t.grids)
+  expect_equal(sum(is.nan(lpst[[1]])),
+              0)
+  expect_equal(dim(lpst[[1]]),
+              c(10, 10))
+})
+
 
 test_that("calculateLpst work well", {
   count.mat <- Matrix(rnbinom(6*800, 30, 0.995), nrow=6)

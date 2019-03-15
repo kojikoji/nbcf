@@ -10,7 +10,6 @@
 ##' @slot t.vec Numeric vector, whose elements represent observed time corresponding to each row of count matrix.
 ##' @slot mean.bias.vec Numeric vector, whose elements represent expted bias for mean value of each row.
 ##' @slot params List, named list of parameters, whose mebers must be "lambda", "r", "alpha" and "beta".
-##' @slot lnb.dict LnbDict, Storage for precomputated log negative binomial probability. This is a instance of  \code{\link{LnbDict}}.
 ##' @slot lpst Numeric matrix, log probability of Ys:t
 ##' @slot lqt Numeric vector, log probability of Yt:n given there is change point in t-1
 ##' @slot lpst.list Numeric matrix, list of \code{lpst} for each variate
@@ -31,7 +30,6 @@ setClass(
     t.vec="vector",
     mean.bias.vec="vector",
     params="list",
-    lnb.dict="LnbDict",
     lpst="matrix",
     lqt="vector",
     lpst.list="list",

@@ -12,6 +12,7 @@
 ##' @param count.res Integer, Approximation resolution of count.
 ##' @param t.res Integer, Approximation resolution of t.
 ##' @param map.fix.num Integer, the number of map change points. If it is \code{NULL}, the point number is automaticaly estimated
+##' @param method Character, this calculate least variance break points when you specify this as "variance"
 ##' @return Nbcf, nbcf Instance of class \code{\link{Nbcf}}
 ##' @seealso [Nbcf]
 ##' @author Yasuhiro Kojima
@@ -21,7 +22,7 @@
 
 calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
-                          p.res=1000, count.res=1000, t.res=100, map.fix.num = NULL){
+                          p.res=1000, count.res=1000, t.res=100, map.fix.num = NULL, method = "nbinom"){
   ## count.mat and mean.bias.vec  are ordered based on t.vec 
   count.mat <- count.mat[, order(t.vec)]
   mean.bias.vec <- mean.bias.vec[order(t.vec)]
@@ -30,17 +31,26 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
   if(length(rownames(count.mat)) == 0){
     rownames(count.mat) <- seq(nrow(count.mat))
   }
-  lnb.dict <- setupLnbDict(max(count.mat), mean.bias.vec, r, alpha, beta, count.res, p.res)
   ## t.grids will seprate observation into t.res bins
   t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
-  lpst.list <- calculateLpstList(lnb.dict, count.mat, t.grids)
+  if(method == "variance"){
+    lnb.dict <- NULL
+    lpst.list <- calculateVarLpstList(count.mat, mean.bias.vec, t.grids)
+  }else{
+    lnb.dict <- setupLnbDict(max(count.mat), mean.bias.vec, r, alpha, beta, count.res, p.res)
+    lpst.list <- calculateLpstList(lnb.dict, count.mat, t.grids)
+  }
   names(lpst.list) <- rownames(count.mat)
   lqt.list <- purrr::map(lpst.list, ~ calculateLqt(.x, lambda))
   bf.list <- purrr::map2(lqt.list, lpst.list, ~ .x[1] - .y[1, ncol(.y)])
   lpst <- purrr::reduce(lpst.list, ~ .x + .y)
   used.vars <- rownames(count.mat)
   lqt <- calculateLqt(lpst, lambda)
-  sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
+  if(method == "variance"){
+    sim.change.point.list <- list()
+  }else{
+    sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
+  }
   if(is.numeric(map.fix.num)){
     map.change.point <- calculateMapFix(lpst, lambda, map.fix.num)
   }else{
@@ -67,7 +77,6 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                 lambda = lambda,
                 p.res = p.res,
                 count.res = count.res),
-              lnb.dict = lnb.dict,
               lpst = lpst,
               lqt = lqt,
               lpst.list = lpst.list,

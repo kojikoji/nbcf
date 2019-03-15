@@ -45,7 +45,7 @@ calculateOneVariateLpst <- function(lnb.dict, count.vec, t.grids){
 ##' Calculate ratio of probability between divided and merged for local bin
 ##'
 ##' Based on probability for each intervals, comparing probability for fixed length interval which is divided at half point or not.
-##' @title calculateLpst
+##' @title calculateLhrDivideTwo
 ##' @param lpst Numeric matrix, log probability for each time interval
 ##' @return lhr.vec log ratio of compared probabilities
 ##' @author Yasuhiro Kojima
@@ -62,4 +62,39 @@ calculateLhrDivideTwo <- function(lpst, bin.prop=0.2){
                                )
                     )
   return(lhr.vec)
+}
+
+
+##' Calculate variance of log normalized count for each intervals and each variate
+##'
+##' Calculate variance of log normalized count for each intervals and each variate. This is used when \code{method == "variance"} in calculateNbcf.
+##' @title calculateLpstVar
+##' @param count.mat Integer matrix, count data. each row and column represent variate and observation
+##' @param mean.bias.vec Numeric vector, bias for each observation
+##' @param t.grids Numeric vector, grid index of t.vec
+##' @return lpst.list List, variance of log normalized counts at each interval and each variate
+##' @author Yasuhiro Kojima
+##' @import purrr
+calculateVarLpstList <- function(count.mat, mean.bias.vec, t.grids){
+  ## functions set  
+  normalizeLogNormalize <- function(count.vec){
+    log(count.vec/mean.bias.vec + 1) %>%
+      {./sum(.)}
+  }
+  calculateElement <- function(init.idx, row.idx, norm.vec){
+    norm.vec[t.grids[row.idx]:t.grids[init.idx + 1]] %>%
+      {-sum((. - mean(.))**2)}
+  }
+  calculateRow <- function(row.idx, norm.vec){
+    c(rep(0, row.idx-1), unlist(purrr::map(row.idx:end.idx, calculateElement, row.idx, norm.vec)))
+  }
+  calculateVar <- function(var){
+    norm.vec <- normalizeLogNormalize(count.mat[var,]) * 10000
+    purrr::map(seq(end.idx), calculateRow, norm.vec) %>%
+      {do.call(rbind, .)} 
+  }
+  ## parameter set
+  end.idx <- length(t.grids) - 1
+  lpst.list <- purrr::map(rownames(count.mat), calculateVar)
+  return(lpst.list)
 }

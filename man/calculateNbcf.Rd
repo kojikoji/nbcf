@@ -6,7 +6,7 @@
 \usage{
 calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
   r = 30, lambda = 0.01, p.res = 1000, count.res = 1000,
-  t.res = 100, map.fix.num = NULL)
+  t.res = 100, map.fix.num = NULL, method = "nbinom")
 }
 \arguments{
 \item{count.mat}{dgCmatrix, Count matrix. Each row represent each variate. Each column represent each observation}
@@ -26,6 +26,8 @@ calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
 \item{t.res}{Integer, Approximation resolution of t.}
 
 \item{map.fix.num}{Integer, the number of map change points. If it is \code{NULL}, the point number is automaticaly estimated}
+
+\item{method}{Character, this calculate least variance break points when you specify this as "variance"}
 }
 \value{
 Nbcf, nbcf Instance of class \code{\link{Nbcf}}
