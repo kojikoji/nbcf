@@ -6,3 +6,7 @@
 *.so
 *.o
 *.tmp
+
+dev.org
+
+data/sample
