@@ -55,7 +55,8 @@ calculateMapFix <- function(lpst, lambda, K){
   init.stats <- list(lqkl = unlist(purrr::map(seq(1, time.num), ~ lpst[.x, time.num])), shatl = rep(time.num, time.num))
   stats.list <- purrr::accumulate(seq(1, K), calculateStatsK, .init = init.stats)
   map.change.point <- unlist(purrr::accumulate(seq(K, 1), ~ stats.list[[.y + 1]]$shatl[.x + 1], .init = 0))
-  map.change.point[2:length(map.change.point)]
+  lqK.vec <- stats.list[[K + 1]]$lqkl
+  list(change.point = map.change.point[2:length(map.change.point)], lqK.vec= lqK.vec)
 }
 
 

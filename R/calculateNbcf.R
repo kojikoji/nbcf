@@ -52,7 +52,9 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
     sim.change.point.list <- perfectSimulation(lqt, lpst, lambda)
   }
   if(is.numeric(map.fix.num)){
-    map.change.point <- calculateMapFix(lpst, lambda, map.fix.num)
+    map.change.point <- calculateMapFix(lpst, lambda, map.fix.num)$change.point
+    lqt <- calculateMapFix(lpst, lambda, map.fix.num)$lqK.vec
+    
   }else{
     map.change.point <- calculateMap(lpst, lambda)
   }

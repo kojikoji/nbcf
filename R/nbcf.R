@@ -11,7 +11,7 @@
 ##' @slot mean.bias.vec Numeric vector, whose elements represent expted bias for mean value of each row.
 ##' @slot params List, named list of parameters, whose mebers must be "lambda", "r", "alpha" and "beta".
 ##' @slot lpst Numeric matrix, log probability of Ys:t
-##' @slot lqt Numeric vector, log probability of Yt:n given there is change point in t-1
+##' @slot lqt Numeric vector, log probability of Yt:n given there is change point in t-1. This will be maximum probability given k points when you give them.
 ##' @slot lpst.list Numeric matrix, list of \code{lpst} for each variate
 ##' @slot lqt.list Numeric matrix, list of \code{lqt} for each variate
 ##' @slot bf.list Numeric matrix, list of bayes factor for each variate. The larger values indicate the variate changed in time course.
