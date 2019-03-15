@@ -159,11 +159,11 @@ test_that("calculateChangePoints correctly mine changed points for each variate"
   tnum <- 1000
   t.vec <- seq(tnum)
   c1.true.change.point <- 400
-  c1.before.change.vec <- rnbinom(6*(c1.true.change.point), 30, 0.995)
+  c1.before.change.vec <- rnbinom(6*(c1.true.change.point), 30, 0.7)
   c1.after.change.vec <- rnbinom(6*(tnum - c1.true.change.point), 30, 0.95)
   c1.count.mat <- Matrix(c(c1.before.change.vec, c1.after.change.vec), nrow=6, sparse=T)
   c2.true.change.point <- 700
-  c2.before.change.vec <- rnbinom(6*(c2.true.change.point), 30, 0.995)
+  c2.before.change.vec <- rnbinom(6*(c2.true.change.point), 30, 0.7)
   c2.after.change.vec <- rnbinom(6*(tnum - c2.true.change.point), 30, 0.95)
   c2.count.mat <- Matrix(c(c2.before.change.vec, c2.after.change.vec), nrow=6, sparse=T)
   count.mat <- rbind(c1.count.mat, c2.count.mat)
@@ -212,13 +212,13 @@ test_that("calculateChangePoints correctly mine changed points for each variate,
   change.point.df <- calculateChangePoints(count.mat, t.vec, mean.bias.vec,
                                            alpha, beta, r, lambda,
                                            p.res, count.res, t.res, method = "sim")
-  v1.ct.vec <- dplyr::filter(change.point.df, var == "1")$change.point
+  v1.ct.vec <- dplyr::filter(change.point.df, var == "1") %>% dplyr::filter(count == max(count)) %>% {.$change.point}
   expect_lt(
     abs(mean(v1.ct.vec) - 400),
     200
   )
   
-  v2.ct.vec <- dplyr::filter(change.point.df, var == "7")$change.point
+  v2.ct.vec <- dplyr::filter(change.point.df, var == "7") %>% dplyr::filter(count == max(count)) %>% {.$change.point}
   expect_lt(
     abs(mean(v2.ct.vec) - 700),
     200
