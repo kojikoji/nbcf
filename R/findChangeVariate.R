@@ -24,8 +24,11 @@ findChangeVariate <- function(lpst.list, used.vars, ct.vec, lambda = 0.5){
                joined.lpst <- lpst.list[[var]][previous.ct, following.ct]
                divided.lpst <- lpst.list[[var]][previous.ct, ct] + lpst.list[[var]][(ct+1), following.ct]
                bayes.factor <- divided.lpst - joined.lpst
+               this.length <- following.ct - previous.ct
+               total.length <- ncol(lpst.list[[var]])
+               var.ratio <- (-bayes.factor/this.length)/(lpst.list[[var]][1,total.length]/total.length)
                ##:ess-bp-start::browser@nil:##
-tibble(var = var, change.point = ct, bayes.factor = bayes.factor)
+tibble(var = var, change.point = ct, bayes.factor = bayes.factor, var.ratio = var.ratio)
              }
            )
   }else{
