@@ -76,25 +76,52 @@ calculateLhrDivideTwo <- function(lpst, bin.prop=0.2){
 ##' @author Yasuhiro Kojima
 ##' @import purrr
 calculateVarLpstList <- function(count.mat, mean.bias.vec, t.grids){
-  ## functions set  
-  normalizeLogNormalize <- function(count.vec){
-    log(count.vec/mean.bias.vec + 1) %>%
-      {./sum(.)}
-  }
-  calculateElement <- function(init.idx, row.idx, norm.vec){
-    norm.vec[t.grids[row.idx]:t.grids[init.idx + 1]] %>%
-      {-sum((. - mean(.))**2)}
-  }
-  calculateRow <- function(row.idx, norm.vec){
-    c(rep(0, row.idx-1), unlist(purrr::map(row.idx:end.idx, calculateElement, row.idx, norm.vec)))
-  }
-  calculateVar <- function(var){
-    norm.vec <- normalizeLogNormalize(count.mat[var,]) * 10000
-    purrr::map(seq(end.idx), calculateRow, norm.vec) %>%
-      {do.call(rbind, .)} 
-  }
-  ## parameter set
-  end.idx <- length(t.grids) - 1
-  lpst.list <- purrr::map(rownames(count.mat), calculateVar)
+    ## functions set  
+    normalizeLogNormalize <- function(count.vec){
+      log(count.vec/mean.bias.vec + 1) %>%
+	{length(.) * . / sum(.)}
+    }
+    calculateElement <- function(idx, norm.vec){
+      begin.t <- t.grids[idx]
+      end.t <- t.grids[idx + 1] - 1
+      part.vec <- norm.vec[begin.t:end.t]
+      N <- end.t - begin.t + 1
+      mu <- sum(part.vec)/N
+      V <- sum((part.vec - mu)**2)
+      list(
+	N = N,
+	mu = mu,
+	V = V
+      )
+    }
+    calculateN <- function(pre.stats, current.stats){
+      c(pre.stats$N, 0) + current.stats$N
+    }
+    calculateMu <- function(pre.stats, current.stats, N){
+      (c(pre.stats$N * pre.stats$mu, 0) + current.stats$N * current.stats$mu)/N
+    }
+    calculateV <- function(pre.stats, current.stats, N, mu){
+      c(pre.stats$V + pre.stats$N * (pre.stats$mu - mu[1:length(pre.stats$mu)])**2, 0) + current.stats$V + current.stats$N * (current.stats$mu - mu)**2
+    }
+    calculateColStats <- function(pre.stats, current.stats){
+      N <- calculateN(pre.stats, current.stats)
+      mu <- calculateMu(pre.stats, current.stats, N)
+      V <- calculateV(pre.stats, current.stats, N, mu)
+      list(
+	N = N,
+	mu = mu,
+	V = V
+      )
+    }
+    calculateVar <- function(var){
+      norm.vec <- normalizeLogNormalize(count.mat[var,])
+      element.stats.list <- purrr::map(seq(end.idx), calculateElement, norm.vec)
+      col.stats.list <- purrr::accumulate(element.stats.list, calculateColStats)
+      purrr::map(col.stats.list, ~ c(-.x$V, rep(0, end.idx - length(.x$V)))) %>%
+	{do.call(cbind, .)}
+    }
+    ## parameter set
+    end.idx <- length(t.grids) - 1
+    lpst.list <- purrr::map(rownames(count.mat), calculateVar)
   return(lpst.list)
 }
