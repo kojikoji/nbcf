@@ -22,7 +22,7 @@
 
 calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
                           alpha=1.0, beta=1.0, r=30, lambda=0.01,
-                          p.res=1000, count.res=1000, t.res=100, map.fix.num = NULL, method = "nbinom"){
+                          p.res=1000, count.res=1000, t.res=100, map.fix.num = NULL, method = "nbinom", calc.bf.list = TRUE){
   ## count.mat and mean.bias.vec  are ordered based on t.vec 
   count.mat <- count.mat[, order(t.vec)]
   mean.bias.vec <- mean.bias.vec[order(t.vec)]
@@ -41,8 +41,13 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
     lpst.list <- calculateLpstList(lnb.dict, count.mat, t.grids)
   }
   names(lpst.list) <- rownames(count.mat)
-  lqt.list <- purrr::map(lpst.list, ~ calculateLqt(.x, lambda))
-  bf.list <- purrr::map2(lqt.list, lpst.list, ~ .x[1] - .y[1, ncol(.y)])
+  if(calc.bf.list){
+    lqt.list <- purrr::map(lpst.list, ~ calculateLqt(.x, lambda))
+    bf.list <- purrr::map2(lqt.list, lpst.list, ~ .x[1] - .y[1, ncol(.y)])
+  }else{
+    lqt.list <- list()
+    bf.list <- list()
+  }
   lpst <- purrr::reduce(lpst.list, ~ .x + .y)
   used.vars <- rownames(count.mat)
   lqt <- calculateLqt(lpst, lambda)
