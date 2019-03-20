@@ -6,7 +6,8 @@
 \usage{
 calculateNbcf(count.mat, t.vec, mean.bias.vec, alpha = 1, beta = 1,
   r = 30, lambda = 0.01, p.res = 1000, count.res = 1000,
-  t.res = 100, map.fix.num = NULL, method = "nbinom")
+  t.res = 100, map.fix.num = NULL, method = "nbinom",
+  calc.bf.list = TRUE)
 }
 \arguments{
 \item{count.mat}{dgCmatrix, Count matrix. Each row represent each variate. Each column represent each observation}
