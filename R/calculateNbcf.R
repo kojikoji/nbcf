@@ -95,3 +95,58 @@ calculateNbcf <- function(count.mat, t.vec, mean.bias.vec,
               change.variate.df = change.variate.df)
   return(nbcf)
 }
+
+
+##' Function for recalculation of part of \code{\link{calculateNbcf}}
+##'
+##' This function recalculate \code{map.change.points} and \code{change.variate.df} from a existing instance of \code{nbcf}.
+##' 
+##' @title recalculateNbcf
+##' @param old.nbcf, nbcf Instance of class \code{\link{Nbcf}}
+##' @param map.fix.num Integer, the number of map change points. If it is \code{NULL}, the point number is automaticaly estimated
+##' @param method Character, this calculate least variance break points when you specify this as "variance"
+##' @return nbcf, Nbcf Instance of class \code{\link{Nbcf}}
+##' @seealso [Nbcf]
+##' @author Yasuhiro Kojima
+##'
+##' @import purrr
+##' @export
+
+recalculateNbcf <- function(old.nbcf, map.fix.num, lambda = 0.5, used.vars = NULL, calc.change.variate = TRUE){
+  ## count.mat and mean.bias.vec  are ordered based on t.vec
+  t.vec <- old.nbcf@t.vec
+  count.mat <- old.nbcf@count.mat
+  mean.bias.vec <- old.nbcf@mean.bias.vec
+  count.mat <- count.mat[, order(t.vec)]
+  mean.bias.vec <- mean.bias.vec[order(t.vec)]
+  t.vec <- t.vec[order(t.vec)]
+  t.res <- length(old.nbcf@lqt)
+  lpst <- old.nbcf@lpst
+  lpst.list <- old.nbcf@lpst.list
+  ## t.grids will seprate observation into t.res bins
+  t.grids <- as.integer(seq(0, length(t.vec), length.out = t.res+1))
+  if(length(used.vars) == 0){
+    used.vars <- rownames(count.mat)
+  }
+  lpst <- purrr::reduce(lpst.list[used.vars], ~ .x + .y)
+  map.change.point <- calculateMapFix(lpst, lambda, map.fix.num)$change.point
+  lqt <- calculateMapFix(lpst, lambda, map.fix.num)$lqK.vec
+  if(calc.change.variate){
+    change.variate.df <- findChangeVariate(lpst.list, used.vars, map.change.point)
+  }else{
+    change.variate.df <- old.nbcf@change.variate.df
+  }
+  ## conver from grid index to t corresponding to end point of each grid
+  convertTidx2T <- function(t.idx.vec){
+    unlist(purrr::map(t.idx.vec, ~ t.vec[t.grids[.x + 1]]))
+  }
+  outer.map.change.point <- convertTidx2T(map.change.point)
+  change.variate.df$change.point <- convertTidx2T(change.variate.df$change.point)
+  ## move calcualtion results into new object
+  nbcf <- old.nbcf
+  nbcf@map.change.point <- outer.map.change.point
+  nbcf@change.variate.df <- change.variate.df
+  nbcf@lpst <- lpst
+  nbcf@used.vars <- used.vars
+  nbcf
+}
