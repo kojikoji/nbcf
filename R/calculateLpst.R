@@ -117,8 +117,11 @@ calculateVarLpstList <- function(count.mat, mean.bias.vec, t.grids){
       norm.vec <- normalizeLogNormalize(count.mat[var,])
       element.stats.list <- purrr::map(seq(end.idx), calculateElement, norm.vec)
       col.stats.list <- purrr::accumulate(element.stats.list, calculateColStats)
-      purrr::map(col.stats.list, ~ c(-.x$V, rep(0, end.idx - length(.x$V)))) %>%
+      base.mat <- purrr::map(col.stats.list, ~ c(-.x$V, rep(0, end.idx - length(.x$V)))) %>%
 	{do.call(cbind, .)}
+      mod.mat <- purrr::map(col.stats.list, ~ c(.x$N/(.x$N - 1), rep(0, end.idx - length(.x$N)))) %>%
+	{do.call(cbind, .)}
+      base.mat * mod.mat
     }
     ## parameter set
     end.idx <- length(t.grids) - 1
