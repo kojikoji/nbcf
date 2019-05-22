@@ -44,7 +44,7 @@ calculateChangePoints <- function(count.mat, t.vec, mean.bias.vec,
       lqt <- calculateLqt(lpst, lambda)
       bayes.factor <- lqt[1] - lpst[1, ncol(lpst)]
       if(method == "map"){
-        map.change.point <- calculateMapFix(lpst, lambda, map.num)$change.point
+        map.change.point <- calculateMap(lpst, lambda)
         ## put NA for no change point variate
         if(length(map.change.point) == 0) map.change.point <- NA
         tibble(var = var, change.point = map.change.point, bayes.factor = bayes.factor)
