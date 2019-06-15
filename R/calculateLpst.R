@@ -79,7 +79,7 @@ calculateVarLpstList <- function(count.mat, mean.bias.vec, t.grids){
     ## functions set  
     normalizeLogNormalize <- function(count.vec){
       log(count.vec/mean.bias.vec + 1) %>%
-	{length(.) * . / sum(.)}
+	{(. - mean(.) / sd(.))}
     }
     calculateElement <- function(idx, norm.vec){
       begin.t <- t.grids[idx]
